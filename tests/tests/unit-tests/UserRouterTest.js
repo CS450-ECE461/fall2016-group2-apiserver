@@ -12,6 +12,10 @@ describe ('UserRouter', function () {
     blueprint.testing.createApplicationAndStart (appPath, done)
   });
 
+  after (function (done) {
+    blueprint.app.models.User.remove ({}, done);
+  });
+
   describe ('/users', function () {
 
     var user = users[0];
