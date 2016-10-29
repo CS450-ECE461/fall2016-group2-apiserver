@@ -5,14 +5,15 @@
   "private": true,
   "scripts": {
     "test": "env NODE_ENV=test mocha --recursive tests/tests",
-    "start-server": "env NODE_ENV=production forever -o ./app/temp/logs/output.log -e ./app/temp/logs/error.log start ./app/index.js",
-    "stop-server": "env NODE_ENV=production forever stop app/index.js"
+    "start": "node ./app"
   },
   "dependencies": {
     "@onehilltech/blueprint": "^1.1.1",
     "@onehilltech/blueprint-mongodb": "^0.9.1",
     "chai": "^3.5.0",
+    "handlebars": "^4.0.5",
     "mocha": "^3.1.2",
+    "passport-local": "^1.0.0",
     "superagent": "^2.3.0",
     "supertest": "^2.0.1"
   },
