@@ -10,4 +10,13 @@ var schema = new mongodb.Schema({
 });
 
 const COLLECTION_NAME = 'user';
+
+schema.methods.verifyPassword = function (password) {
+  if (this.password == password) {
+    return true;
+  }
+
+  return false;
+};
+
 module.exports = exports = mongodb.model (COLLECTION_NAME, schema);
