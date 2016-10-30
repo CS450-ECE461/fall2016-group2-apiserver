@@ -1,11 +1,10 @@
-
 var blueprint = require ('@onehilltech/blueprint')
   , request   = require ('supertest')
   , expect    = require ('chai').expect
   ;
 
-var appPath = require ('../../fixtures/appPath');
-var users   = require ('../../fixtures/users');
+var appPath = require ('../../../fixtures/appPath');
+var users   = require ('../../../fixtures/users');
 
 describe ('UserRouter', function () {
   before (function (done) {
