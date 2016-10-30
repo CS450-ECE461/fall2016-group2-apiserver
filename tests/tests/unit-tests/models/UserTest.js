@@ -9,14 +9,8 @@ var User    = require ('../../../../app/models/User');
 
 describe ('UserModel', function () {
 
-  var user;
-
   before (function (done) {
     blueprint.testing.createApplicationAndStart (appPath, done);
-
-    // intialize test user
-    var userData = users[0].user;
-    user = new User(userData);
   });
 
   after (function (done) {
@@ -24,6 +18,16 @@ describe ('UserModel', function () {
   });
 
   describe ('Instance Methods', function () {
+    var user;
+
+    before (function (done) {
+      // intialize test user
+      var userData = users[0].user;
+      user = new User(userData);
+
+      return done ();
+    });
+
     it ('should succeed to verifyPassword with correct password', function (done) {
       expect (user.verifyPassword('test')).to.be.true;
       return done ();
