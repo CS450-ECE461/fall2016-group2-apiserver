@@ -1,6 +1,5 @@
+var authenticate = require ('../authenticate');
+
 module.exports = exports = {
-  '/helloworld' : {
-    get  : { view   : 'helloworld.pug' },
-    post : { action : 'HelloWorldController@echoName'},
-  }
+  '/v1': authenticate
 };
