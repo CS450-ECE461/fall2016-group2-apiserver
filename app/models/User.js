@@ -7,6 +7,7 @@ var schema = new mongodb.Schema({
   password:   {type: String, required: true, trim: true},
   job_title:  {type: String, required: true, trim: true},
   org_id:     {type: String, required: false, trim: true}, // not required until orgs exist
+  token:      {type: String, required: false, trim: true},
 });
 
 const COLLECTION_NAME = 'user';

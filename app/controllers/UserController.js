@@ -44,8 +44,16 @@ UserController.prototype.login = function () {
         }
         else {
           var secret = blueprint.app.configs.server.middleware.jwt.secret;
-          var access_token = jwt.sign (user, secret);
-          res.status (200).json ({ token: access_token });
+          var access_token = jwt.sign ({ _id: user._id }, secret);
+
+          delete user.token;
+
+          user.token = access_token;
+          user.save (function (err, user) {
+            if (err) { return callback (err); }
+
+            res.status (200).json ({ token: user.token });
+          });
         }
       });
     }
