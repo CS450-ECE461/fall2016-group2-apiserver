@@ -31,21 +31,21 @@ UserController.prototype.login = function () {
     execute: function (req, res, callback) {
       var data = {username: req.body.username};
 
-      User.findOne(data, function (err, user) {
+      User.findOne (data, function (err, user) {
         if (err) {
           return callback (err);
         }
 
         if (!user) {
-          res.status(404).send('User not found');
+          res.status (404).send ('User not found');
         }
-        else if (!user.verifyPassword(req.body.password)) {
-          res.status(400).send('invalid password');
+        else if (!user.verifyPassword (req.body.password)) {
+          res.status (400).send ('invalid password');
         }
         else {
           var secret = blueprint.app.configs.server.middleware.jwt.secret;
-          var access_token = jwt.sign(user, secret);
-          res.status(200).json({ token: access_token });
+          var access_token = jwt.sign (user, secret);
+          res.status (200).json ({ token: access_token });
         }
       });
     }
