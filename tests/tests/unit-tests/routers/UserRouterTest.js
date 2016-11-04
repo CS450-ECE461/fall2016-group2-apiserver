@@ -53,7 +53,7 @@ describe ('UserRouter', function () {
       it ('should create a user in the database', function (done) {
         request (blueprint.app.server.app)
           .post ('/v1/users') // route
-          .set ('Authorization', access_token)
+          .set ('Authorization', 'bearer ' + access_token)
           .send (userData) // data being sent
           .expect (200) // expected statusCode
 
@@ -77,14 +77,14 @@ describe ('UserRouter', function () {
         // Use supertest to make a request and check response.
         request (blueprint.app.server.app)
           .get ('/v1/users')
-          .set ('Authorization', access_token)
+          .set ('Authorization', 'bearer ' + access_token)
           .expect (200, done);
       });
 
       it ('should get single user in the database', function (done) {
         request (blueprint.app.server.app)
           .get ('/v1/users/' + userId)
-          .set ('Authorization', access_token)
+          .set ('Authorization', 'bearer ' + access_token)
           .expect (200)
           .end (function (err, res) {
             if (err) { return done (err); }
@@ -103,7 +103,7 @@ describe ('UserRouter', function () {
 
         request (blueprint.app.server.app)
           .put ('/v1/users/' + userId)
-          .set ('Authorization', access_token)
+          .set ('Authorization', 'bearer ' + access_token)
           .send (updatedUser)
           .expect (200)
           .end (function (err, res) {
@@ -119,7 +119,7 @@ describe ('UserRouter', function () {
       it ('should delete a single user in the database', function (done) {
         request (blueprint.app.server.app)
           .delete ('/v1/users/' + userId)
-          .set ('Authorization', access_token)
+          .set ('Authorization', 'bearer ' + access_token)
           .expect (200, done);
       });
     });
