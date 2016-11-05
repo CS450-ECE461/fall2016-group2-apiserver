@@ -12,8 +12,11 @@
     "@onehilltech/blueprint": "^1.1.1",
     "@onehilltech/blueprint-mongodb": "^0.9.1",
     "chai": "^3.5.0",
+    "jsonwebtoken": "^7.1.9",
     "istanbul": "^0.4.5",
     "mocha": "^3.1.2",
+    "passport": "^0.3.2",
+    "passport-http-bearer": "^1.0.1",
     "superagent": "^2.3.0",
     "supertest": "^2.0.1"
   },

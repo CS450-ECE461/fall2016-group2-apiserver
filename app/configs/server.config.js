@@ -15,6 +15,10 @@ module.exports = exports = {
     morgan: {
       format: 'dev',
       immediate: true
+    },
+
+    jwt: {
+      secret: 'ssshhh'
     }
   }
 };

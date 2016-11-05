@@ -1,6 +1,5 @@
+var passport = require ('passport');
+
 module.exports = exports = {
-  '/helloworld' : {
-    get  : { view   : 'helloworld.pug' },
-    post : { action : 'HelloWorldController@echoName'},
-  }
+  '/v1': passport.authenticate ('bearer', { session: false }),
 };
