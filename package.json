@@ -13,7 +13,7 @@
     "@onehilltech/blueprint": "^1.1.1",
     "@onehilltech/blueprint-mongodb": "^0.9.1",
     "chai": "^3.5.0",
-    "coveralls": "^2.11.9",
+    "coveralls": "^2.11.14",
     "jsonwebtoken": "^7.1.9",
     "istanbul": "^0.4.5",
     "mocha": "^3.1.2",
