@@ -1,12 +1,17 @@
 var users = [
   {
-    user: {
-      email:      'user1@test.com',
-      username:   'user1',
-      password:   'test',
-      job_title:  'tester',
-      role:       'user'
-    }
+    email:      'user1@test.com',
+    username:   'user1',
+    password:   'test',
+    job_title:  'tester',
+    role:       'user'
+  },
+  {
+    email:      'admin1@test.com',
+    username:   'admin1',
+    password:   'test',
+    job_title:  'administrator',
+    role:       'admin'
   }
 ]
 

@@ -22,7 +22,7 @@ describe ('UserModel', function () {
 
     before (function (done) {
       // intialize test user
-      var userData = users[0].user;
+      var userData = users[0];
       user = new User(userData);
 
       return done ();
