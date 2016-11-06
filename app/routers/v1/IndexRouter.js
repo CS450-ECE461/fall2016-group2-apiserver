@@ -1,5 +1,5 @@
-var isAdmin = require ('../../middleware/isAdmin');
+var authenticate = require ('../../middleware/authenticate');
 
 module.exports = exports = {
-  '/admin': isAdmin
+  '/admin': authenticate.isAdminToken
 };
