@@ -1,6 +1,6 @@
 // UserRouter
 module.exports = exports = {
   '/login': {
-    post: { action: 'UserController@login' }
+    post: { action: 'LoginController@login' }
   }
 };
