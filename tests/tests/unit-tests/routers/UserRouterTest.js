@@ -15,18 +15,20 @@ describe ('UserRouter', function () {
     blueprint.app.models.User.remove ({}, done);
   });
 
-  describe ('/v1/users', function () {
+  describe ('/v1/admin/users', function () {
+
+    var adminData;
+    var adminAccessToken;
 
     var userData;
     var userId;
-    var access_token;
 
     before (function (done) {
-      userData = users[0];
+      adminData = users[1];
       var User = blueprint.app.models.User;
-      var newUser = new User (userData.user);
+      var newAdmin = new User (adminData);
 
-      newUser.save (function (err, user) {
+      newAdmin.save (function (err, user) {
         if (err) { return done (err); }
 
         var data = {
@@ -43,18 +45,65 @@ describe ('UserRouter', function () {
               return done (err);
             }
 
-            access_token = res.body.token;
+            adminAccessToken = res.body.token;
             return done ();
           });
       });
     });
 
-    describe ('POST', function (done) {
+    describe ('Authentication', function () {
+
+      var userAccessToken;
+
+      before (function (done) {
+        userData = users[0];
+        var User = blueprint.app.models.User;
+        var newUser = new User (userData);
+
+        newUser.save (function (err, user) {
+          if (err) { return done (err); }
+
+          var data = {
+            username: user.username,
+            password: user.password
+          }
+
+          request (blueprint.app.server.app)
+            .post ('/login')
+            .send (data)
+            .expect (200)
+            .end (function (err, res) {
+              if (err) {
+                return done (err);
+              }
+
+              userAccessToken = res.body.token;
+              return done ();
+            });
+        });
+      });
+
+      it ('should allow admin to access user routes', function (done) {
+        request (blueprint.app.server.app)
+          .get ('/v1/admin/users') // route
+          .set ('Authorization', 'bearer ' + adminAccessToken)
+          .expect (200, done);
+      });
+
+      it ('should not allow user to access user routes', function (done) {
+        request (blueprint.app.server.app)
+          .get ('/v1/admin/users') // route
+          .set ('Authorization', 'bearer ' + userAccessToken)
+          .expect (401, done);
+      });
+    });
+
+    describe ('POST', function () {
       it ('should create a user in the database', function (done) {
         request (blueprint.app.server.app)
-          .post ('/v1/users') // route
-          .set ('Authorization', 'bearer ' + access_token)
-          .send (userData) // data being sent
+          .post ('/v1/admin/users') // route
+          .set ('Authorization', 'bearer ' + adminAccessToken)
+          .send ({user: userData}) // data being sent
           .expect (200) // expected statusCode
 
           // end actually sends the request and the callback handles the response
@@ -64,7 +113,7 @@ describe ('UserRouter', function () {
 
             userId = res.body.user._id;
             // note: user.user is because the request structure required
-            expect (res.body.user.username).to.equal (userData.user.username);
+            expect (res.body.user.username).to.equal (userData.username);
 
             // always return done() to continue the test chain
             return done();
@@ -76,15 +125,15 @@ describe ('UserRouter', function () {
       it ('should get all users in the database', function (done) {
         // Use supertest to make a request and check response.
         request (blueprint.app.server.app)
-          .get ('/v1/users')
-          .set ('Authorization', 'bearer ' + access_token)
+          .get ('/v1/admin/users')
+          .set ('Authorization', 'bearer ' + adminAccessToken)
           .expect (200, done);
       });
 
       it ('should get single user in the database', function (done) {
         request (blueprint.app.server.app)
-          .get ('/v1/users/' + userId)
-          .set ('Authorization', 'bearer ' + access_token)
+          .get ('/v1/admin/users/' + userId)
+          .set ('Authorization', 'bearer ' + adminAccessToken)
           .expect (200)
           .end (function (err, res) {
             if (err) { return done (err); }
@@ -99,12 +148,12 @@ describe ('UserRouter', function () {
       it ('should update a single user in the database', function (done) {
 
         var updatedUser = userData;
-        updatedUser.user.job_title = 'developer';
+        updatedUser.job_title = 'developer';
 
         request (blueprint.app.server.app)
-          .put ('/v1/users/' + userId)
-          .set ('Authorization', 'bearer ' + access_token)
-          .send (updatedUser)
+          .put ('/v1/admin/users/' + userId)
+          .set ('Authorization', 'bearer ' + adminAccessToken)
+          .send ({user: updatedUser})
           .expect (200)
           .end (function (err, res) {
             if (err) { return done (err); }
@@ -118,8 +167,8 @@ describe ('UserRouter', function () {
     describe ('DELETE', function (done) {
       it ('should delete a single user in the database', function (done) {
         request (blueprint.app.server.app)
-          .delete ('/v1/users/' + userId)
-          .set ('Authorization', 'bearer ' + access_token)
+          .delete ('/v1/admin/users/' + userId)
+          .set ('Authorization', 'bearer ' + adminAccessToken)
           .expect (200, done);
       });
     });
