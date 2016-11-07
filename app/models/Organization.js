@@ -8,6 +8,6 @@ var schema = new mongodb.Schema({
   industry:   {type: String, required: true, trim: true},
 });
 
-const COLLECTION_NAME = 'org';
+const COLLECTION_NAME = 'organization';
 
 module.exports = exports = mongodb.model (COLLECTION_NAME, schema);
