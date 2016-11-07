@@ -15,9 +15,9 @@ describe ('LoginRouter', function () {
     blueprint.app.models.User.remove ({}, done);
   });
 
-  describe ('/login', function () {
+  describe ('/admin/login', function () {
 
-    var userData = users[0].user;
+    var userData = users[1];
     var token;
     var credentials;
 
@@ -35,7 +35,48 @@ describe ('LoginRouter', function () {
 
         return done ();
       });
-    })
+    });
+
+    describe ('POST', function () {
+      it ('should login with valid admin credentials', function (done) {
+        request (blueprint.app.server.app)
+          .post ('/admin/login')
+          .send (credentials)
+          .expect (200)
+          .end (function (err, res) {
+            if (err) {
+              return done (err);
+            }
+
+            token = res.body.token;
+            expect (token).to.not.be.undefined;
+            return done ();
+          });
+      });
+    });
+  });
+
+  describe ('/login', function () {
+
+    var userData = users[0];
+    var token;
+    var credentials;
+
+    before (function (done) {
+      var User = blueprint.app.models.User;
+      var newUser = new User (userData);
+
+      newUser.save(function (err, user) {
+        if (err) { return done (err); }
+
+        credentials = {
+          username: user.username,
+          password: user.password
+        }
+
+        return done ();
+      });
+    });
 
     describe ('POST', function () {
       it ('should return valid access_token on login', function (done) {
