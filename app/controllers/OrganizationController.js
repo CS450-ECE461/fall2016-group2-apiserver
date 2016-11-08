@@ -1,7 +1,7 @@
 var blueprint = require ('@onehilltech/blueprint')
   , mongodb = require ('@onehilltech/blueprint-mongodb')
   , ResourceController = mongodb.ResourceController
-  , messaging = blueprint.message
+  , messaging = blueprint.messaging
   ;
 
 var Organization = require ('../models/Organization')
@@ -28,13 +28,11 @@ OrganizationController.prototype.create = function () {
             return callback (null, doc);
           }
         });
+      },
+      postExecute: function () {
+        messaging.emit('organization.created', organization)
       }
     }
-    // on: {
-    //   postExecute: function () {
-    //     messaging.emit('organization.created', organization)
-    //   }
-    // }
   };
   return mongodb.ResourceController.prototype.create.call(this, opts);
 };
