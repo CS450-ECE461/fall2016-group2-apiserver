@@ -1,6 +1,7 @@
 var blueprint = require ('@onehilltech/blueprint')
   , mongodb = require ('@onehilltech/blueprint-mongodb')
   , ResourceController = mongodb.ResourceController
+  , messaging = blueprint.message
   ;
 
 var Organization = require ('../models/Organization')
@@ -17,7 +18,7 @@ blueprint.controller (OrganizationController, ResourceController);
 OrganizationController.prototype.create = function () {
   var opts = {
     on: {
-      preCreate: function (req, doc, callback){
+      preCreate: function (req, doc, callback) {
         Organization.findOne({ name: req.body.name }, function (err, organization) {
           if (err) { return callback (err); }
 
@@ -27,6 +28,10 @@ OrganizationController.prototype.create = function () {
             return callback (null, doc);
           }
         });
+      }
+
+      postExecute: function (organization) {
+        messaging.emit('organization.created', organization)
       }
     }
   };
