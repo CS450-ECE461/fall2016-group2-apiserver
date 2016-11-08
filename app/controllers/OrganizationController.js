@@ -29,11 +29,12 @@ OrganizationController.prototype.create = function () {
           }
         });
       }
-
-      postExecute: function (organization) {
-        messaging.emit('organization.created', organization)
-      }
     }
+    // on: {
+    //   postExecute: function () {
+    //     messaging.emit('organization.created', organization)
+    //   }
+    // }
   };
   return mongodb.ResourceController.prototype.create.call(this, opts);
 };
