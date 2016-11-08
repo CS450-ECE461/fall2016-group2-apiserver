@@ -1,8 +1,4 @@
 [![Build Status](https://travis-ci.org/CS450-ECE461/fall2016-group2-apiserver.svg?branch=master)](https://travis-ci.org/CS450-ECE461/fall2016-group2-apiserver)
-<<<<<<< HEAD
-=======
-
->>>>>>> 2a3b62df1b2fb9a2a2e28a3a61aae7ff7e3e3410
 # fall2016-group2-apiserver
 
 For a detailed explanation of Blueprint's Core Components and how they are implemented, see [Blueprint Crash Course](https://github.com/CS450-ECE461/fall2016-group2-apiserver/wiki/Blueprint-Crash-Course)
