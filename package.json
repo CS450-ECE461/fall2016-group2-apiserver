@@ -6,15 +6,18 @@
   "scripts": {
     "test": "env NODE_ENV=test mocha --recursive tests/tests",
     "cover": "env NODE_ENV=test istanbul cover _mocha -- --recursive tests/tests",
+    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "start": "node ./app"
   },
   "dependencies": {
     "@onehilltech/blueprint": "^1.1.1",
     "@onehilltech/blueprint-mongodb": "^0.9.1",
     "chai": "^3.5.0",
+    "coveralls": "^2.11.14",
     "jsonwebtoken": "^7.1.9",
     "istanbul": "^0.4.5",
     "mocha": "^3.1.2",
+    "mocha-lcov-reporter": "^1.2.0",
     "passport": "^0.3.2",
     "passport-http-bearer": "^1.0.1",
     "superagent": "^2.3.0",
