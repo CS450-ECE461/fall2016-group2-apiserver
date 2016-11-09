@@ -62,26 +62,26 @@ describe ('OrganizationRouter', function () {
     describe ('PUT', function (done) {
       it ('should update a single organization in the database', function (done) {
 
-        var updatedUser = user;
-        updatedUser.user.job_title = 'developer';
+        var updatedOrganization = organization;
+        updatedOrganization.organization.job_title = 'developer';
 
         request (blueprint.app.server.app)
-          .put ('/users/' + userId)
-          .send (updatedUser)
+          .put ('/organizations/' + organizationId)
+          .send (updatedOrganization)
           .expect (200)
           .end (function (err, res) {
             if (err) { return done (err); }
 
-            expect (res.body.user.job_title).to.equal ('developer');
+            expect (res.body.organization.job_title).to.equal ('developer');
             return done ();
           });
       });
     });
 
     describe ('DELETE', function (done) {
-      it ('should delete a single user in the database', function (done) {
+      it ('should delete a single organization in the database', function (done) {
         request (blueprint.app.server.app)
-          .delete ('/users/' + userId)
+          .delete ('/organizations/' + organizationId)
           .expect (200, done);
       });
     });
