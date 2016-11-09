@@ -11,6 +11,10 @@ describe ('OrganizationRouter', function () {
     blueprint.testing.createApplicationAndStart (appPath, done)
   });
 
+  after (function (done) {
+    blueprint.app.models.Organization.remove ({}, done);
+  });
+
   describe ('/organizations', function () {
 
     var organization = organizations[0];
@@ -59,24 +63,24 @@ describe ('OrganizationRouter', function () {
       });
     });
 
-    // describe ('PUT', function (done) {
-    //   it ('should update a single organization in the database', function (done) {
-    //
-    //     var updatedOrganization = organization;
-    //     updatedOrganization.organization.website = 'webweb@site.com';
-    //
-    //     request (blueprint.app.server.app)
-    //       .put ('/organizations/' + organizationId)
-    //       .send (updatedOrganization)
-    //       .expect (200)
-    //       .end (function (err, res) {
-    //         if (err) { return done (err); }
-    //
-    //         expect (res.body.organization.website).to.equal ('webweb@site.com');
-    //         return done ();
-    //       });
-    //   });
-    // });
+    describe ('PUT', function (done) {
+      it ('should update a single organization in the database', function (done) {
+
+        var updatedOrganization = organization;
+        updatedOrganization.organization.website = 'webweb@site.com';
+
+        request (blueprint.app.server.app)
+          .put ('/organizations/' + organizationId)
+          .send (updatedOrganization)
+          .expect (200)
+          .end (function (err, res) {
+            if (err) { return done (err); }
+
+            expect (res.body.organization.website).to.equal ('webweb@site.com');
+            return done ();
+          });
+      });
+    });
 
     describe ('DELETE', function (done) {
       it ('should delete a single organization in the database', function (done) {
