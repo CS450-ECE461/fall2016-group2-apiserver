@@ -43,7 +43,7 @@ describe ('OrganizationRouter', function () {
         }
 
         request (blueprint.app.server.app)
-          .post ('/login')
+          .post ('/admin/login')
           .send (data)
           .expect (200)
           .end (function (err, res) {
@@ -135,7 +135,7 @@ describe ('OrganizationRouter', function () {
           .expect (200, done);
       });
 
-      it ('should get single user in the database', function (done) {
+      it ('should get single organization in the database', function (done) {
         request (blueprint.app.server.app)
           .get ('/v1/admin/organizations/' + organizationId)
           .set ('Authorization', 'bearer ' + adminAccessToken)

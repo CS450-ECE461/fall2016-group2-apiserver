@@ -29,8 +29,9 @@ OrganizationController.prototype.create = function () {
           }
         });
       },
-      postExecute: function () {
-        messaging.emit('organization.created', organization)
+      postExecute: function (req, result, callback) {
+        messaging.emit('organization.created', result);
+        return callback (null, result);
       }
     }
   };
