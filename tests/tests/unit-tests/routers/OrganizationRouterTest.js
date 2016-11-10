@@ -158,7 +158,7 @@ describe ('OrganizationRouter', function () {
         request (blueprint.app.server.app)
           .put ('/v1/admin/organizations/' + organizationId)
           .set ('Authorization', 'bearer ' + adminAccessToken)
-          .send ({user: updatedUser})
+          .send ({organization: updatedOrganization})
           .expect (200)
           .end (function (err, res) {
             if (err) { return done (err); }
