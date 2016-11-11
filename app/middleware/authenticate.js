@@ -8,6 +8,7 @@ authenticate.isAdminToken  = function (req, res, next) {
 
   // retrieve user by token
   User.findOne ({token: token}, function (err, user) {
+    /* instanbul ignore if */
     if (err) { return next (err); }
 
     // verify that the user has the admin role
@@ -25,6 +26,7 @@ authenticate.isAdminUser  = function (req, res, next) {
 
   // retrieve user by token
   User.findOne ({username: username}, function (err, user) {
+    /* instanbul ignore if */
     if (err) { return next (err); }
 
     // verify that the user has the admin role
