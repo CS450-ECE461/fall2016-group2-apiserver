@@ -100,7 +100,7 @@ describe ('OrganizationRouter', function () {
         request (blueprint.app.server.app)
           .get ('/v1/admin/organizations') // route
           .set ('Authorization', 'bearer ' + userAccessToken)
-          .expect (401, done);
+          .expect (403, done);
       });
     });
 

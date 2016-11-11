@@ -14,7 +14,7 @@ authenticate.isAdminToken  = function (req, res, next) {
     // verify that the user has the admin role
     var role = user.role;
     if (role != 'admin') {
-      return res.status (401).send ('User is a not an admin');
+      return res.status (403).send ('User is a not an admin');
     }
 
     return next ();
@@ -32,7 +32,7 @@ authenticate.isAdminUser  = function (req, res, next) {
     // verify that the user has the admin role
     var role = user.role;
     if (role != 'admin') {
-      return res.status (401).send ('User is a not an admin');
+      return res.status (403).send ('User is a not an admin');
     }
 
     return next ();

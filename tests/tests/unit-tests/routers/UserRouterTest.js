@@ -90,11 +90,11 @@ describe ('UserRouter', function () {
           .expect (200, done);
       });
 
-      it ('should not allow user to access user routes', function (done) {
+      it ('should not allow user to access admin routes', function (done) {
         request (blueprint.app.server.app)
           .get ('/v1/admin/users') // route
           .set ('Authorization', 'bearer ' + userAccessToken)
-          .expect (401, done);
+          .expect (403, done);
       });
     });
 
