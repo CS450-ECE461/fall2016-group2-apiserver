@@ -124,6 +124,14 @@ describe ('OrganizationRouter', function () {
             return done();
           });
       });
+
+      it ('should fail to create an organization with existing name', function (done) {
+        request (blueprint.app.server.app)
+          .post ('/v1/admin/organizations')
+          .set ('Authorization', 'bearer ' + adminAccessToken)
+          .send ({organization: organizationData})
+          .expect (400, done);
+      });
     });
 
     describe ('GET', function (done) {
