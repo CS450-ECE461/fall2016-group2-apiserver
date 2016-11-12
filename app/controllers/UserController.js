@@ -19,11 +19,11 @@ UserController.prototype.create = function ()
   var opts = {
     on: {
       preCreate: function (req, doc, callback) {
-        User.findOne ({ username: req.body.username, org_id: req.body.org_id }, function (err, user) {
+        User.findOne ({ username: doc.username, org_id: doc.org_id }, function (err, user) {
           if (err) { return callack (err); }
 
           if (user) {
-            return callback (new Error ('user already exists'), doc);
+            return callback ('user already exists', null);
           } else {
             return callback (null, doc);
           }
