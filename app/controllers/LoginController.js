@@ -30,9 +30,8 @@ LoginController.prototype.login = function () {
       var data = {username: req.body.username};
 
       User.findOne (data, function (err, user) {
-        if (err) {
-          return callback (err);
-        }
+        /* instanbul ignore if */
+        if (err) { return callback (err); }
 
         if (!user) {
           res.status (404).send ('User not found');

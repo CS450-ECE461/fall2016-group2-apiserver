@@ -100,7 +100,7 @@ describe ('OrganizationRouter', function () {
         request (blueprint.app.server.app)
           .get ('/v1/admin/organizations') // route
           .set ('Authorization', 'bearer ' + userAccessToken)
-          .expect (401, done);
+          .expect (403, done);
       });
     });
 
@@ -123,6 +123,14 @@ describe ('OrganizationRouter', function () {
             // always return done() to continue the test chain
             return done();
           });
+      });
+
+      it ('should fail to create an organization with existing name', function (done) {
+        request (blueprint.app.server.app)
+          .post ('/v1/admin/organizations')
+          .set ('Authorization', 'bearer ' + adminAccessToken)
+          .send ({organization: organizationData})
+          .expect (400, done);
       });
     });
 
