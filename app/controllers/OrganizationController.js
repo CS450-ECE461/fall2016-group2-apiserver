@@ -28,11 +28,11 @@ OrganizationController.prototype.create = function () {
             return callback (null, doc);
           }
         });
-      },
-      postExecute: function (req, result, callback) {
-        messaging.emit('organization.created', result);
-        return callback (null, result);
-      }
+      }//,
+      // postExecute: function (req, result, callback) {
+      //   messaging.emit('organization.created', result);
+      //   return callback (null, result);
+      // }
     }
   };
   return mongodb.ResourceController.prototype.create.call(this, opts);
