@@ -30,6 +30,7 @@ OrganizationController.prototype.create = function () {
         });
       },
       postExecute: function (req, result, callback) {
+        messaging.emit('organization.created', result);
         return callback (null, result);
       }
     }
