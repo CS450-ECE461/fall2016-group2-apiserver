@@ -124,15 +124,13 @@ describe ('OrganizationRouter', function () {
             return done();
           });
 
-        it ('should create a new admin', function (done) {
-          request (blueprint.app.server.app)
-            .get ('/v1/admin/users/' + userId)
-            .set ('Authorization', 'bearer ' + adminAccessToken)
-            .expect (200)
-            .end (function (err, res) {
-              if (err) { return done (err); }
-        });
-      });
+        // it ('a new admin should have been created', function (done) {
+        //   request (blueprint.app.server.app)
+        //     .get ('/v1/admin/users/' + userId)
+        //     .set ('Authorization', 'bearer ' + adminAccessToken)
+        //     .expect (200)
+        //
+        // });
 
       it ('should fail to create an organization with existing name', function (done) {
         request (blueprint.app.server.app)
