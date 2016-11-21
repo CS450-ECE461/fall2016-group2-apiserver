@@ -123,6 +123,15 @@ describe ('OrganizationRouter', function () {
             // always return done() to continue the test chain
             return done();
           });
+
+        it ('should create a new admin', function (done) {
+          request (blueprint.app.server.app)
+            .get ('/v1/admin/users/' + userId)
+            .set ('Authorization', 'bearer ' + adminAccessToken)
+            .expect (200)
+            .end (function (err, res) {
+              if (err) { return done (err); }
+        });
       });
 
       it ('should fail to create an organization with existing name', function (done) {

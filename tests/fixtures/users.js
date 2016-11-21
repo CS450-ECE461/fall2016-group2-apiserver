@@ -13,6 +13,13 @@ var users = [
     job_title:  'administrator',
     role:       'admin'
   }
+  {
+    email:      'admin2@test.com',
+    username:   'admin2',
+    password:   'test',
+    job_title:  'administrator',
+    role:       'admin'
+  }
 ]
 
 module.exports = exports = users;
