@@ -1,11 +1,20 @@
 // OrganizationRouter
 module.exports = exports = {
   '/organizations' : {
-    resource: {
-      controller: 'OrganizationController',
+    get: { action: 'OrganizationController@getAll' },
+    put: { action: 'OrganizationController@update' },
 
-      // optional list of operations to allow
-      deny: ['create', 'delete'],
+    '/:organizationId': {
+      get: { action: 'OrganizationController@get' },
+
+      '/users' : {
+        get: { action: 'UserController@getAll' },
+
+        '/:userId': {
+          get: { action: 'UserController@get' },
+          put: { action: 'UserController@update' }
+        }
+      }
     }
   }
 };
