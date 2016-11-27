@@ -4,6 +4,8 @@ var blueprint = require ('@onehilltech/blueprint')
   , messaging = blueprint.messaging
   ;
 
+var User = require ('../../models/User')
+  ;
 var Organization = require ('../models/Organization')
   ;
 
@@ -30,8 +32,22 @@ OrganizationController.prototype.create = function () {
         });
       },
       postExecute: function (req, result, callback) {
-        messaging.emit('organization.created', result);
-        return callback (null, result);
+        // create dummy admin data
+        var adminData = {
+          email: req.body.user.email,
+          username: 'admin',
+          password: 'password',
+          org_id: organization._id,
+          role: 'admin'
+        }
+
+        var User = blueprint.app.models.User;
+        newAdmin = new User (adminData);
+
+        newAdmin.save (function (err, user) {
+          if (err) { return done (err); }
+          return done ();
+        });
       }
     }
   };
