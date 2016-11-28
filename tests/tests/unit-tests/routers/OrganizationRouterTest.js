@@ -105,6 +105,9 @@ describe ('OrganizationRouter', function () {
     });
 
     describe ('POST', function () {
+
+      var adminId;
+
       it ('should create an organization in the database', function (done) {
         request (blueprint.app.server.app)
           .post ('/v1/admin/organizations') // route
@@ -117,19 +120,26 @@ describe ('OrganizationRouter', function () {
           .end (function (err, res) {
             if (err) { return done (err); }
 
-            organizationId= res.body.organization._id;
+            adminId = res.body.organization.admin_id;
+            organizationId = res.body.organization.org_id;
             // note: user.user is because the request structure required
-            expect (res.body.organization.name).to.equal (organizationData.name);
+            expect (res.body.organization.org_id).to.not.be.undefined;
             // always return done() to continue the test chain
-            return done();
+            return done ();
           });
+      });
 
-          it ('should create a new admin after creating an organization', function (done) {
-            request (blueprint.app.server.app)
-              .get ('/v1/admin/users/' + userId)
-              .set ('Authorization', 'bearer ' + adminAccessToken)
-              .expect (200, done);
-          });
+      it ('should create a new admin after creating an organization', function (done) {
+        request (blueprint.app.server.app)
+        .get ('/v1/admin/users/' + adminId)
+        .set ('Authorization', 'bearer ' + adminAccessToken)
+        .expect (200)
+        .end (function (err, res) {
+          if (err) { return done (err); }
+
+          expect (res.body.user.role).to.equal ('admin');
+          return done ();
+        });
       });
 
       it ('should fail to create an organization with existing name', function (done) {
