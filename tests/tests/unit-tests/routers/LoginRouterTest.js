@@ -144,6 +144,19 @@ describe ('LoginRouter', function () {
           .send (invalidCredentials)
           .expect (403, done);
       });
+
+      it ('should fail to login with an unknown username', function (done) {
+          var unknownCredentials = {
+              username: 'unknown',
+              password: credentials.password
+          }
+
+          request(blueprint.app.server.app)
+              .post ('/admin/login')
+              .send (unknownCredentials)
+              .expect (404, done);
+
+      });
     });
   });
 });

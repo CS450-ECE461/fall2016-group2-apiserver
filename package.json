@@ -10,8 +10,8 @@
     "start": "node ./app"
   },
   "dependencies": {
-    "@onehilltech/blueprint": "^1.1.1",
-    "@onehilltech/blueprint-mongodb": "^0.9.1",
+    "@onehilltech/blueprint": "1.1.1",
+    "@onehilltech/blueprint-mongodb": "0.9.1",
     "chai": "^3.5.0",
     "coveralls": "^2.11.14",
     "istanbul": "^0.4.5",
