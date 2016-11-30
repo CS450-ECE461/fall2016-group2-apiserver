@@ -15,7 +15,8 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-    packages:3
+     packages:
+    		- g++-4.8
 
 after_success:
    - npm run coveralls
