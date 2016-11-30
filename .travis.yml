@@ -20,3 +20,26 @@ addons:
 
 after_success:
    - npm run coveralls
+deploy:
+- provider: s3
+  access_key_id: AKIAJANAZTAR2ECCDDGA
+  secret_access_key: &1
+    secure: Q3bQHJGJ0tUI+S0cZjohgfnl/GBAl5oi3gKTrTGUzjmEUtgDDCybUyHzAoRVT1kRC/pIhu74X3zQuzlJf83WqGnQezXNkaCdbdITZCjgv5Q/lAHTZ2G3KoDcs3CQ8ilRhYQG8Y4k5pQw6t5xOI660hliScEb9uaMGCxSPvmdaHUW/AH8rweT8oqmxUmOI9I7ho6F7yweqrhkyrcnAiJxbiaJ4bJTalyBfFiNaznnfxoHbDldcexrqX+c0Ztx8UGcIX3z+kJuoQ/39AoXflz7/+77yRioeXDzVZO+FAJdHu2MfQbRtTdcWMGEj8m+q1YS+JlrlNKV0xUE7BhaQBMjfaIKtTe1v0LQiFQ3MOS1Y7+Vi9x6px3xpFc7LR1uKZ76tctNc5lPyJyp5TpJF/wrHyPe6zhmGjTCAokkH6XjtgycAtAQSosdQPUMQMwkYdVfB23gZp8MD0kk6+ZuihCEyml9aVs4doQJczxNUmTR+i/BidL7yKcqDZj1YSm7T4T/ndmABEq6tQiR/75SZlFDNiZkEQVE+WlUrcu8n9Pn0EvL2XvUaJii8H4wx5QZvCVYntlssCDZUzMeHVxw5ZSOIHdlpP7NYQ+40115lk26WdMtGmFNqhr+iLM8O58O6oE0DcGwA0TNRdvNXZm9RyZH6Q3Ba02eEn/KgDNqVwU/58g=
+  local_dir: dpl_cd_upload
+  skip_cleanup: true
+  on: &2
+    repo: CS450-ECE461/fall2016-group2-apiserver
+    branch: issue44-setup-continuous-deployment
+  bucket: ''
+- provider: codedeploy
+  access_key_id: AKIAJANAZTAR2ECCDDGA
+  secret_access_key: *1
+  bucket: ''
+  key: ''
+  bundle_type: ''
+  application: fall2016-group2-apiserver
+  deployment_group: ''
+  on: *2
+before_deploy:
+- mkdir -p dpl_cd_upload
+- mv '' dpl_cd_upload/''
