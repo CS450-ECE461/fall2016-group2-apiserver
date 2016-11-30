@@ -20,3 +20,11 @@ addons:
 
 after_success:
    - npm run coveralls
+
+
+deploy:
+  provider: codedeploy
+  access_key_id: AKIAI4C7YLG342MK6KMA
+  secret_access_key: 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
+  bucket: 'hive-backend-dev-bucket'
+  deployment-group: 'HiveBackendTeam'
