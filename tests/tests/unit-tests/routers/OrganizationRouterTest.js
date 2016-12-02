@@ -112,7 +112,7 @@ describe ('OrganizationRouter', function () {
         request (blueprint.app.server.app)
           .post ('/v1/admin/organizations') // route
           .set ('Authorization', 'bearer ' + adminAccessToken)
-          .send ({organization: organizationData}) // data being sent
+          .send (organizationData) // data being sent
           .expect (200) // expected statusCode
 
           // end actually sends the request and the callback handles the response
@@ -146,7 +146,7 @@ describe ('OrganizationRouter', function () {
         request (blueprint.app.server.app)
           .post ('/v1/admin/organizations')
           .set ('Authorization', 'bearer ' + adminAccessToken)
-          .send ({organization: organizationData})
+          .send (organizationData)
           .expect (400, done);
       });
     });
@@ -178,12 +178,12 @@ describe ('OrganizationRouter', function () {
       it ('should update a single organization in the database', function (done) {
 
         var updatedOrganization = organizationData;
-        updatedOrganization.website = 'webweb@org.com';
+        updatedOrganization.organization.website = 'webweb@org.com';
 
         request (blueprint.app.server.app)
           .put ('/v1/admin/organizations/' + organizationId)
           .set ('Authorization', 'bearer ' + adminAccessToken)
-          .send ({organization: updatedOrganization})
+          .send (updatedOrganization)
           .expect (200)
           .end (function (err, res) {
             if (err) { return done (err); }

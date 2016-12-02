@@ -36,15 +36,9 @@ OrganizationController.prototype.create = function () {
       postExecute: function (req, organization, cb) {
         async.waterfall ([
           function (callback) {
-            var user = req.body.user;
-            var email = undefined;
-            if (user) {
-              email = user.email;
-            }
-
             // create dummy admin data
             var adminData = {
-              email: email || 'test@test.org',
+              email: req.body.user.email,
               username: 'admin',
               password: 'password',
               org_id: organization._id,
