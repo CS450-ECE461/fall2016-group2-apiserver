@@ -2,8 +2,8 @@ var mongodb = require ('@onehilltech/blueprint-mongodb')
     ;
 
 var schema = new mongodb.Schema ({
-    sender_id:      {type: String, required: true, trim: true},
-    receiver_id:    {type: String, required: true, trim: true},
+    sender_email:      {type: String, required: true, trim: true},
+    receiver_email:    {type: String, required: true, trim: true},
     received:       {type: Boolean, required: true},
     viewed:         {type: Boolean, required: true},
     timeout:        {type: Date, required: true},
