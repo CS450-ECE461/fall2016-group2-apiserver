@@ -126,24 +126,46 @@ describe ('UserRouter', function () {
 
     describe ('POST', function () {
       it ('should create a user in the database', function (done) {
+        var data = users[3];
         request (blueprint.app.server.app)
           .post ('/v1/admin/users') // route
           .set ('Authorization', 'bearer ' + adminAccessToken)
-          .send ({user: userData}) // data being sent
-          .expect (200) // expected statusCode
-
-          // end actually sends the request and the callback handles the response
-          // this is where you will want to perform your tests
+          .send ({user: data})
+          .expect (200)
           .end (function (err, res) {
             if (err) { return done (err); }
 
             userId = res.body.user._id;
-            // note: user.user is because the request structure required
-            expect (res.body.user.email).to.equal (userData.email);
-
-            // always return done() to continue the test chain
+            expect (res.body.user.email).to.equal (data.email);
             return done();
           });
+      });
+
+      it ('should fail to create a user with an existing email address', function (done) {
+        var data = users[3];
+        request (blueprint.app.server.app)
+        .post ('/v1/admin/users') // route
+        .set ('Authorization', 'bearer ' + adminAccessToken)
+        .send ({user: data})
+        .expect (400)
+        .end (function (err, res) {
+          expect (res.error.text).to.equal ('email already taken');
+          return done ();
+        });
+      });
+
+      it ('should fail to create a user with conflicting username within an organization', function (done) {
+        var data = users[3];
+        data.email = 'noconflict@gmail.com';
+        request (blueprint.app.server.app)
+        .post ('/v1/admin/users') // route
+        .set ('Authorization', 'bearer ' + adminAccessToken)
+        .send ({user: data})
+        .expect (400)
+        .end (function (err, res) {
+          expect (res.error.text).to.equal ('user already exists');
+          return done ();
+        });
       });
     });
 
