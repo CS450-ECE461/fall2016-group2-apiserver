@@ -1,11 +1,13 @@
-var blueprint = require ('@onehilltech/blueprint')
-  , request   = require ('supertest')
-  , expect    = require ('chai').expect
+var blueprint     = require ('@onehilltech/blueprint')
+  , request       = require ('supertest')
+  , expect        = require ('chai').expect
+  , nodemailer    = require ('nodemailer')
+  , stubTransport = require ('nodemailer-stub-transport')
   ;
 
 var appPath         = require ('../../../fixtures/appPath');
 var organizations   = require ('../../../fixtures/organizations');
-var users   = require ('../../../fixtures/users');
+var users           = require ('../../../fixtures/users');
 
 describe ('OrganizationRouter', function () {
   before (function (done) {
