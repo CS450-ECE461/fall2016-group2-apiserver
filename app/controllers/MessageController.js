@@ -24,7 +24,7 @@ MessageController.prototype.getMessagesByReceiver = function () {
                 User.findOne({token: token}, callback)
             },
             function (user, callback) {
-                Message.find({reciever_email: user.email})
+                Message.find({receiver_email: user.email})
                     .where('expireAt').gte(Date.now())
                     .exec(callback);
             },
