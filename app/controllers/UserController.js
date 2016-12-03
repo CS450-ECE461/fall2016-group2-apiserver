@@ -1,6 +1,7 @@
 var blueprint = require ('@onehilltech/blueprint')
   , mongodb = require ('@onehilltech/blueprint-mongodb')
   , ResourceController = mongodb.ResourceController
+  , async = require ('async')
   ;
 
 var User = require ('../models/User')
@@ -34,22 +35,47 @@ UserController.prototype.getUsersByOrg = function () {
   }
 };
 
-blueprint.controller (UserController, ResourceController);
-
 UserController.prototype.create = function ()
 {
   var opts = {
     on: {
-      preCreate: function (req, doc, callback) {
-        User.findOne ({ username: doc.username, org_id: doc.org_id }, function (err, user) {
-          if (err) { return callack (err); }
+      preCreate: function (req, doc, cb) {
+        async.waterfall ([
+          function (callback) {
+            var token = req.headers.authorization.split(' ')[1];
 
-          if (user) {
-            return callback ('user already exists', null);
-          } else {
-            return callback (null, doc);
+            User.findOne ({token: token}, function (err, admin) {
+              if (err) { callback (err); }
+
+              doc.org_id = admin.org_id;
+              callback (null, doc);
+            });
+          },
+
+          function (doc, callback) {
+            User.findOne ({email: doc.email}, function (err, user) {
+              if (err) { callback (err); }
+
+              if (user) {
+                callback ('email already taken', null);
+              } else {
+                callback (null, doc);
+              }
+            });
+          },
+
+          function (doc, callback) {
+            User.findOne ({username: doc.username, org_id: doc.org_id}, function (err, user) {
+              if (err) { callback (err); }
+
+              if (user) {
+                callback ('user already exists', null);
+              } else {
+                callback (null, doc);
+              }
+            });
           }
-        });
+        ], cb);
       }
     }
   };
@@ -57,5 +83,6 @@ UserController.prototype.create = function ()
   return mongodb.ResourceController.prototype.create.call (this, opts);
 };
 
+blueprint.controller (UserController, ResourceController);
 
 module.exports = exports = UserController;
