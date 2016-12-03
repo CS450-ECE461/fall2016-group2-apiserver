@@ -14,6 +14,8 @@ function MessageController () {
     ResourceController.call (this, {name: 'message', model: Message});
 }
 
+blueprint.controller (MessageController, ResourceController);
+
 MessageController.prototype.getMessagesByReceiver = function () {
     return function(res, req){
         // splits bearer and the token into an array ['bearer', token]
@@ -39,6 +41,5 @@ MessageController.prototype.getMessagesByReceiver = function () {
     }
 };
 
-blueprint.controller (MessageController, ResourceController);
 
 module.exports = MessageController;
