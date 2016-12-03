@@ -40,7 +40,7 @@ describe ('OrganizationRouter', function () {
         if (err) { return done (err); }
 
         var data = {
-          username: user.username,
+          email: user.email,
           password: user.password
         }
 
@@ -72,7 +72,7 @@ describe ('OrganizationRouter', function () {
           if (err) { return done (err); }
 
           var data = {
-            username: user.username,
+            email: user.email,
             password: user.password
           }
 

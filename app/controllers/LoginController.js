@@ -15,19 +15,19 @@ blueprint.controller (LoginController);
 LoginController.prototype.login = function () {
   return {
     validate: function (req, callback) {
-      req.checkBody ('username', 'Missing username parameter').notEmpty ();
+      req.checkBody ('email', 'Missing email parameter').notEmpty ();
       req.checkBody ('password', 'Missing password parameter').notEmpty ();
       return callback (req.validationErrors (true));
     },
 
     sanitize: function (req, callback) {
-      req.sanitizeBody ('username').toString ();
+      req.sanitizeBody ('email').toString ();
       req.sanitizeBody ('password').toString ();
       return callback (null);
     },
 
     execute: function (req, res, callback) {
-      var data = {username: req.body.username};
+      var data = {email: req.body.email};
 
       User.findOne (data, function (err, user) {
         /* instanbul ignore if */

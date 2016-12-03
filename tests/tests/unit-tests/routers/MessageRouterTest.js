@@ -31,7 +31,7 @@ describe ('MessageRouter', function () {
                 }
 
                 var data = {
-                    username: user.username,
+                    email: user.email,
                     password: user.password
                 };
 
