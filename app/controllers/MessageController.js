@@ -31,6 +31,7 @@ MessageController.prototype.getMessagesByReceiver = function () {
             function (messages, callback) {
                 res.json({messages: messages}).status(200).send();
                 callback(null);
+                return;
             }
         ], function(err) {
                 res.status(400).send(err);
