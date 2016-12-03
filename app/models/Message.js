@@ -6,7 +6,7 @@ var schema = new mongodb.Schema ({
     receiver_email:    {type: String, required: true, trim: true},
     received:       {type: Boolean, required: true},
     viewed:         {type: Boolean, required: true},
-    timeout:        {type: Date, required: true},
+    expireAt:        {type: Date, required: true},
     title:          {type: String, required: true, trim: true},
     content:        {type: String, required: true, trim: true}
 });
