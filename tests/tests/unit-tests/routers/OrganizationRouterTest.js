@@ -39,7 +39,7 @@ describe ('OrganizationRouter', function () {
 
           var organization = new Organization (orgData);
           organization.save (function (err, res) {
-            if (err) { return callback (err); }
+            if (err) { callback (err); }
 
             org_id = res._id;
             callback ();
@@ -54,7 +54,7 @@ describe ('OrganizationRouter', function () {
           newAdmin.org_id = org_id;
 
           newAdmin.save (function (err, user) {
-            if (err) { return done (err); }
+            if (err) { callback (err); }
 
             var data = {
               email: user.email,
@@ -66,9 +66,7 @@ describe ('OrganizationRouter', function () {
             .send (data)
             .expect (200)
             .end (function (err, res) {
-              if (err) {
-                return callback (err);
-              }
+              if (err) { callback (err); }
 
               adminAccessToken = res.body.token;
               return callback ();
