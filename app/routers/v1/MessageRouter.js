@@ -7,6 +7,9 @@ module.exports = exports = {
             get: { action: 'MessageController@get' },
             put: { action: 'MessageController@update' },
             post: { action: 'MessageController@create' }
+        },
+        'recieved' : {
+            get: { action: 'MessageController@getMessagesByReceiver'}
         }
     }
 };
