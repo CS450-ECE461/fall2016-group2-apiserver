@@ -1,11 +1,13 @@
-var blueprint = require ('@onehilltech/blueprint')
-  , request   = require ('supertest')
-  , expect    = require ('chai').expect
+var blueprint     = require ('@onehilltech/blueprint')
+  , request       = require ('supertest')
+  , expect        = require ('chai').expect
+  , nodemailer    = require ('nodemailer')
+  , stubTransport = require ('nodemailer-stub-transport')
   ;
 
 var appPath         = require ('../../../fixtures/appPath');
 var organizations   = require ('../../../fixtures/organizations');
-var users   = require ('../../../fixtures/users');
+var users           = require ('../../../fixtures/users');
 
 describe ('OrganizationRouter', function () {
   before (function (done) {
@@ -105,11 +107,14 @@ describe ('OrganizationRouter', function () {
     });
 
     describe ('POST', function () {
+
+      var adminId;
+
       it ('should create an organization in the database', function (done) {
         request (blueprint.app.server.app)
           .post ('/v1/admin/organizations') // route
           .set ('Authorization', 'bearer ' + adminAccessToken)
-          .send ({organization: organizationData}) // data being sent
+          .send (organizationData) // data being sent
           .expect (200) // expected statusCode
 
           // end actually sends the request and the callback handles the response
@@ -117,19 +122,33 @@ describe ('OrganizationRouter', function () {
           .end (function (err, res) {
             if (err) { return done (err); }
 
-            organizationId= res.body.organization._id;
+            adminId = res.body.organization.admin_id;
+            organizationId = res.body.organization.org_id;
             // note: user.user is because the request structure required
-            expect (res.body.organization.name).to.equal (organizationData.name);
+            expect (res.body.organization.org_id).to.not.be.undefined;
             // always return done() to continue the test chain
-            return done();
+            return done ();
           });
+      });
+
+      it ('should create a new admin after creating an organization', function (done) {
+        request (blueprint.app.server.app)
+        .get ('/v1/admin/users/' + adminId)
+        .set ('Authorization', 'bearer ' + adminAccessToken)
+        .expect (200)
+        .end (function (err, res) {
+          if (err) { return done (err); }
+
+          expect (res.body.user.role).to.equal ('admin');
+          return done ();
+        });
       });
 
       it ('should fail to create an organization with existing name', function (done) {
         request (blueprint.app.server.app)
           .post ('/v1/admin/organizations')
           .set ('Authorization', 'bearer ' + adminAccessToken)
-          .send ({organization: organizationData})
+          .send (organizationData)
           .expect (400, done);
       });
     });
@@ -161,12 +180,12 @@ describe ('OrganizationRouter', function () {
       it ('should update a single organization in the database', function (done) {
 
         var updatedOrganization = organizationData;
-        updatedOrganization.website = 'webweb@org.com';
+        updatedOrganization.organization.website = 'webweb@org.com';
 
         request (blueprint.app.server.app)
           .put ('/v1/admin/organizations/' + organizationId)
           .set ('Authorization', 'bearer ' + adminAccessToken)
-          .send ({organization: updatedOrganization})
+          .send (updatedOrganization)
           .expect (200)
           .end (function (err, res) {
             if (err) { return done (err); }
