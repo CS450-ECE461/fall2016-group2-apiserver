@@ -23,6 +23,6 @@ var organizations = [
       email: 'admin@org.com'
     }
   }
-]
+];
 
 module.exports = exports = organizations;

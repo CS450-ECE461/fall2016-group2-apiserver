@@ -1,10 +1,13 @@
 var blueprint = require ('@onehilltech/blueprint')
   , request   = require ('supertest')
   , expect    = require ('chai').expect
+  , async     = require ('async')
   ;
 
-var appPath = require ('../../../fixtures/appPath');
-var users   = require ('../../../fixtures/users');
+var appPath = require ('../../../fixtures/appPath')
+  , users   = require ('../../../fixtures/users')
+  , organizations = require ('../../../fixtures/organizations')
+  ;
 
 describe ('UserRouter', function () {
   before (function (done) {
@@ -12,7 +15,8 @@ describe ('UserRouter', function () {
   });
 
   after (function (done) {
-    blueprint.app.models.User.remove ({}, done);
+    blueprint.app.models.User.remove ({});
+    blueprint.app.models.Organization.remove ({}, done);
   });
 
   describe ('/v1/admin/users', function () {
@@ -23,32 +27,53 @@ describe ('UserRouter', function () {
     var userData;
     var userId;
 
+    var org_id;
+
     before (function (done) {
-      adminData = users[1];
-      var User = blueprint.app.models.User;
-      var newAdmin = new User (adminData);
+      async.series ([
+        function (callback) {
+          var Organization = blueprint.app.models.Organization;
+          var orgData = organizations[0].organization;
 
-      newAdmin.save (function (err, user) {
-        if (err) { return done (err); }
+          var organization = new Organization (orgData);
+          organization.save (function (err, res) {
+            if (err) { return callback (err); }
 
-        var data = {
-          email: user.email,
-          password: user.password
-        }
-
-        request (blueprint.app.server.app)
-          .post ('/login')
-          .send (data)
-          .expect (200)
-          .end (function (err, res) {
-            if (err) {
-              return done (err);
-            }
-
-            adminAccessToken = res.body.token;
-            return done ();
+            org_id = res._id;
+            callback ();
           });
-      });
+        },
+
+        function (callback) {
+          adminData = users[1];
+          var User = blueprint.app.models.User;
+          var newAdmin = new User (adminData);
+          newAdmin.org_id = org_id;
+
+          newAdmin.save (function (err, user) {
+            if (err) { return done (err); }
+
+            var data = {
+              email: user.email,
+              password: user.password
+            };
+
+            request (blueprint.app.server.app)
+            .post ('/login')
+            .send (data)
+            .expect (200)
+            .end (function (err, res) {
+              if (err) {
+                return callback (err);
+              }
+
+              adminAccessToken = res.body.token;
+              return callback ();
+            });
+          });
+        }
+      ], done);
+
     });
 
     describe ('Authentication', function () {
@@ -59,6 +84,7 @@ describe ('UserRouter', function () {
         userData = users[0];
         var User = blueprint.app.models.User;
         var newUser = new User (userData);
+        newUser.org_id = org_id;
 
         newUser.save (function (err, user) {
           if (err) { return done (err); }
@@ -66,7 +92,7 @@ describe ('UserRouter', function () {
           var data = {
             email: user.email,
             password: user.password
-          }
+          };
 
           request (blueprint.app.server.app)
             .post ('/login')
