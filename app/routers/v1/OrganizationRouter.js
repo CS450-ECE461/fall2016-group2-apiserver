@@ -4,17 +4,12 @@ module.exports = exports = {
     get: { action: 'OrganizationController@getAll' },
     put: { action: 'OrganizationController@update' },
 
+    '/users': {
+      get: { action: 'UserController@getUsersByOrg' }
+    },
+
     '/:organizationId': {
-      get: { action: 'OrganizationController@get' },
-
-      '/users' : {
-        get: { action: 'UserController@getAll' },
-
-        '/:userId': {
-          get: { action: 'UserController@get' },
-          put: { action: 'UserController@update' }
-        }
-      }
+      get: { action: 'OrganizationController@get' }
     }
   }
 };
