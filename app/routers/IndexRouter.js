@@ -6,5 +6,10 @@ module.exports = exports = {
     '/users': {
       post: { action: 'UserController@create' }
     }
+  },
+  '/organizations': {
+    resource: {
+      controller: 'OrganizationController'
+    }
   }
 };

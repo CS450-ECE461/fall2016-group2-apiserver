@@ -32,7 +32,7 @@ describe ('LoginRouter', function () {
         if (err) { return done (err); }
 
         credentials = {
-          username: user.username,
+          email: user.email,
           password: user.password
         }
 
@@ -57,9 +57,9 @@ describe ('LoginRouter', function () {
           });
       });
 
-      it ('should fail to login with invalid username', function (done) {
+      it ('should fail to login with invalid email', function (done) {
         var wrongCredentials = {
-          username: 'wrong',
+          email: 'wrong',
           password: credentials.password
         }
 
@@ -71,7 +71,7 @@ describe ('LoginRouter', function () {
 
       it ('should fail to login with invalid password', function (done) {
         var wrongCredentials = {
-          username: credentials.username,
+          email: credentials.email,
           password: 'wrong'
         }
 
@@ -83,7 +83,7 @@ describe ('LoginRouter', function () {
 
       it ('should fail to validate credentials on login', function (done) {
         var wrongCredentials = {
-          username: credentials.username
+          email: credentials.email
         }
 
         request (blueprint.app.server.app)
@@ -108,7 +108,7 @@ describe ('LoginRouter', function () {
         if (err) { return done (err); }
 
         credentials = {
-          username: user.username,
+          email: user.email,
           password: user.password
         }
 
@@ -135,7 +135,7 @@ describe ('LoginRouter', function () {
 
       it ('should fail to login with user credentials', function (done) {
         var invalidCredentials = {
-          username: userData.username,
+          email: userData.email,
           password: userData.password
         }
 
@@ -143,6 +143,19 @@ describe ('LoginRouter', function () {
           .post ('/admin/login')
           .send (invalidCredentials)
           .expect (403, done);
+      });
+
+      it ('should fail to login with an unknown email', function (done) {
+          var unknownCredentials = {
+              email: 'unknown',
+              password: credentials.password
+          }
+
+          request(blueprint.app.server.app)
+              .post ('/admin/login')
+              .send (unknownCredentials)
+              .expect (404, done);
+
       });
     });
   });

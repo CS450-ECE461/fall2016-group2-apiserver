@@ -40,5 +40,6 @@ jspm_packages
 ### Blueprint.js template
 app/temp
 
-### idea files
-.idea/
+# Jet Brains IDE Files
+.idea
+>>>>>>> development

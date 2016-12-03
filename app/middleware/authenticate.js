@@ -22,12 +22,17 @@ authenticate.isAdminToken  = function (req, res, next) {
 }
 
 authenticate.isAdminUser  = function (req, res, next) {
-  var username = req.body.username;
+  var email = req.body.email;
 
   // retrieve user by token
-  User.findOne ({username: username}, function (err, user) {
+  User.findOne ({email: email}, function (err, user) {
     /* instanbul ignore if */
     if (err) { return next (err); }
+
+    //verify that a user was found in database if not, send error
+    if(!user){
+      return res.status (404).send('User not found');
+    }
 
     // verify that the user has the admin role
     var role = user.role;

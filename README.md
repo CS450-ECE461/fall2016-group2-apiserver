@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/CS450-ECE461/fall2016-group2-apiserver.svg?branch=master)](https://travis-ci.org/CS450-ECE461/fall2016-group2-apiserver)
+[![Build Status](https://travis-ci.org/CS450-ECE461/fall2016-group2-apiserver.svg?branch=development)](https://travis-ci.org/CS450-ECE461/fall2016-group2-apiserver)
 [![Coverage Status](https://coveralls.io/repos/github/CS450-ECE461/fall2016-group2-apiserver/badge.svg?branch=development)](https://coveralls.io/github/CS450-ECE461/fall2016-group2-apiserver?branch=development)
 
 # Hive Apiserver

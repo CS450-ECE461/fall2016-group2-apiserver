@@ -2,8 +2,13 @@ var blueprint = require ('@onehilltech/blueprint')
   , mongodb = require ('@onehilltech/blueprint-mongodb')
   , ResourceController = mongodb.ResourceController
   , messaging = blueprint.messaging
+  , async = require ('async')
+  , nodemailer = require ('nodemailer')
+  , nodeMailers = require ('../middleware/nodeMailers')
   ;
 
+var User = require ('../models/User')
+  ;
 var Organization = require ('../models/Organization')
   ;
 
@@ -29,9 +34,30 @@ OrganizationController.prototype.create = function () {
           }
         });
       },
-      postExecute: function (req, result, callback) {
-        messaging.emit('organization.created', result);
-        return callback (null, result);
+      postExecute: function (req, organization, cb) {
+        async.waterfall ([
+          function (callback) {
+            // create dummy admin data
+            var adminData = {
+              email: req.body.user.email,
+              username: 'admin',
+              password: 'password',
+              org_id: organization._id,
+              role: 'admin',
+              job_title: 'administrator'
+            };
+
+            var User = blueprint.app.models.User;
+            var newAdmin = new User (adminData);
+
+            newAdmin.save (function (err, user) {
+              if (err) { return callback (err); }
+
+              callback (null, {user: user, organization: organization});
+            });
+          },
+          nodeMailers.resolveMailer()
+        ], cb);
       }
     }
   };

@@ -32,7 +32,7 @@ describe ('UserRouter', function () {
         if (err) { return done (err); }
 
         var data = {
-          username: user.username,
+          email: user.email,
           password: user.password
         }
 
@@ -64,7 +64,7 @@ describe ('UserRouter', function () {
           if (err) { return done (err); }
 
           var data = {
-            username: user.username,
+            email: user.email,
             password: user.password
           }
 
@@ -113,7 +113,7 @@ describe ('UserRouter', function () {
 
             userId = res.body.user._id;
             // note: user.user is because the request structure required
-            expect (res.body.user.username).to.equal (userData.username);
+            expect (res.body.user.email).to.equal (userData.email);
 
             // always return done() to continue the test chain
             return done();
