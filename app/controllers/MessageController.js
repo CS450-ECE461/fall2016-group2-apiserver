@@ -17,7 +17,7 @@ function MessageController () {
 blueprint.controller (MessageController, ResourceController);
 
 MessageController.prototype.getMessagesByReceiver = function () {
-    return function(res, req){
+    return function(req, res){
         // splits bearer and the token into an array ['bearer', token]
         var token = req.headers.authorization.split(' ')[1];
 
@@ -26,7 +26,7 @@ MessageController.prototype.getMessagesByReceiver = function () {
                 User.findOne({token: token}, callback)
             },
             function (user, callback) {
-                Message.find({receiver_email: user.email})
+                Message.find({receiver_email: user.email}, {__v: 0})
                     .where('expireAt').gte(Date.now())
                     .exec(callback);
             },
@@ -36,7 +36,8 @@ MessageController.prototype.getMessagesByReceiver = function () {
                 return;
             }
         ], function(err) {
-                res.status(400).send(err);
+                if(err)
+                    res.status(400).send(err);
         });
     }
 };
