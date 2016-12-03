@@ -8,7 +8,7 @@ module.exports = exports = {
             put: { action: 'MessageController@update' },
             post: { action: 'MessageController@create' }
         },
-        'recieved' : {
+        '/received' : {
             get: { action: 'MessageController@getMessagesByReceiver'}
         }
     }
