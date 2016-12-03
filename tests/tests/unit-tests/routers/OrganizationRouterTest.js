@@ -1,21 +1,24 @@
-var blueprint = require ('@onehilltech/blueprint')
-  , request   = require ('supertest')
-  , expect    = require ('chai').expect
+var blueprint     = require ('@onehilltech/blueprint')
+  , request       = require ('supertest')
+  , expect        = require ('chai').expect
+  , nodemailer    = require ('nodemailer')
+  , stubTransport = require ('nodemailer-stub-transport')
   ;
 
-var appPath = require ('../../../fixtures/appPath');
-var users   = require ('../../../fixtures/users');
+var appPath         = require ('../../../fixtures/appPath');
+var organizations   = require ('../../../fixtures/organizations');
+var users           = require ('../../../fixtures/users');
 
-describe ('UserRouter', function () {
+describe ('OrganizationRouter', function () {
   before (function (done) {
     blueprint.testing.createApplicationAndStart (appPath, done)
   });
 
   after (function (done) {
-    blueprint.app.models.User.remove ({}, done);
+    blueprint.app.models.Organization.remove ({}, done);
   });
 
-  describe ('/v1/admin/users', function () {
+  describe ('v1/admin/organizations', function () {
 
     var adminData;
     var adminAccessToken;
@@ -23,8 +26,13 @@ describe ('UserRouter', function () {
     var userData;
     var userId;
 
+    var organizationData;
+    var organizationId;
+
     before (function (done) {
       adminData = users[1];
+      organizationData = organizations[0];
+
       var User = blueprint.app.models.User;
       var newAdmin = new User (adminData);
 
@@ -37,7 +45,7 @@ describe ('UserRouter', function () {
         }
 
         request (blueprint.app.server.app)
-          .post ('/login')
+          .post ('/admin/login')
           .send (data)
           .expect (200)
           .end (function (err, res) {
@@ -83,27 +91,30 @@ describe ('UserRouter', function () {
         });
       });
 
-      it ('should allow admin to access user routes', function (done) {
+      it ('should allow admin to access organization routes', function (done) {
         request (blueprint.app.server.app)
-          .get ('/v1/admin/users') // route
+          .get ('/v1/admin/organizations') // route
           .set ('Authorization', 'bearer ' + adminAccessToken)
           .expect (200, done);
       });
 
-      it ('should not allow user to access admin routes', function (done) {
+      it ('should not allow user to access organization routes', function (done) {
         request (blueprint.app.server.app)
-          .get ('/v1/admin/users') // route
+          .get ('/v1/admin/organizations') // route
           .set ('Authorization', 'bearer ' + userAccessToken)
           .expect (403, done);
       });
     });
 
     describe ('POST', function () {
-      it ('should create a user in the database', function (done) {
+
+      var adminId;
+
+      it ('should create an organization in the database', function (done) {
         request (blueprint.app.server.app)
-          .post ('/v1/admin/users') // route
+          .post ('/v1/admin/organizations') // route
           .set ('Authorization', 'bearer ' + adminAccessToken)
-          .send ({user: userData}) // data being sent
+          .send (organizationData) // data being sent
           .expect (200) // expected statusCode
 
           // end actually sends the request and the callback handles the response
@@ -111,63 +122,84 @@ describe ('UserRouter', function () {
           .end (function (err, res) {
             if (err) { return done (err); }
 
-            userId = res.body.user._id;
+            adminId = res.body.organization.admin_id;
+            organizationId = res.body.organization.org_id;
             // note: user.user is because the request structure required
-            expect (res.body.user.email).to.equal (userData.email);
-
+            expect (res.body.organization.org_id).to.not.be.undefined;
             // always return done() to continue the test chain
-            return done();
+            return done ();
           });
+      });
+
+      it ('should create a new admin after creating an organization', function (done) {
+        request (blueprint.app.server.app)
+        .get ('/v1/admin/users/' + adminId)
+        .set ('Authorization', 'bearer ' + adminAccessToken)
+        .expect (200)
+        .end (function (err, res) {
+          if (err) { return done (err); }
+
+          expect (res.body.user.role).to.equal ('admin');
+          return done ();
+        });
+      });
+
+      it ('should fail to create an organization with existing name', function (done) {
+        request (blueprint.app.server.app)
+          .post ('/v1/admin/organizations')
+          .set ('Authorization', 'bearer ' + adminAccessToken)
+          .send (organizationData)
+          .expect (400, done);
       });
     });
 
     describe ('GET', function (done) {
-      it ('should get all users in the database', function (done) {
+      it ('should get all organizations in the database', function (done) {
         // Use supertest to make a request and check response.
         request (blueprint.app.server.app)
-          .get ('/v1/admin/users')
+          .get ('/v1/admin/organizations')
           .set ('Authorization', 'bearer ' + adminAccessToken)
           .expect (200, done);
       });
 
-      it ('should get single user in the database', function (done) {
+      it ('should get single organization in the database', function (done) {
         request (blueprint.app.server.app)
-          .get ('/v1/admin/users/' + userId)
+          .get ('/v1/admin/organizations/' + organizationId)
           .set ('Authorization', 'bearer ' + adminAccessToken)
           .expect (200)
           .end (function (err, res) {
             if (err) { return done (err); }
 
-            expect (res.body.user._id).to.equal (userId);
+            expect (res.body.organization._id).to.equal (organizationId);
             return done ();
           });
       });
     });
 
     describe ('PUT', function (done) {
-      it ('should update a single user in the database', function (done) {
+      it ('should update a single organization in the database', function (done) {
 
-        var updatedUser = userData;
-        updatedUser.job_title = 'developer';
+        var updatedOrganization = organizationData;
+        updatedOrganization.organization.website = 'webweb@org.com';
 
         request (blueprint.app.server.app)
-          .put ('/v1/admin/users/' + userId)
+          .put ('/v1/admin/organizations/' + organizationId)
           .set ('Authorization', 'bearer ' + adminAccessToken)
-          .send ({user: updatedUser})
+          .send (updatedOrganization)
           .expect (200)
           .end (function (err, res) {
             if (err) { return done (err); }
 
-            expect (res.body.user.job_title).to.equal ('developer');
+            expect (res.body.organization.website).to.equal ('webweb@org.com');
             return done ();
           });
       });
     });
 
     describe ('DELETE', function (done) {
-      it ('should delete a single user in the database', function (done) {
+      it ('should delete a single organization in the database', function (done) {
         request (blueprint.app.server.app)
-          .delete ('/v1/admin/users/' + userId)
+          .delete ('/v1/admin/organizations/' + organizationId)
           .set ('Authorization', 'bearer ' + adminAccessToken)
           .expect (200, done);
       });
