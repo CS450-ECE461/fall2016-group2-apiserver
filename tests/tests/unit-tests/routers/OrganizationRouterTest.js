@@ -16,6 +16,7 @@ describe ('OrganizationRouter', function () {
   });
 
   after (function (done) {
+    blueprint.app.models.User.remove ({});
     blueprint.app.models.Organization.remove ({}, done);
   });
 
@@ -25,7 +26,6 @@ describe ('OrganizationRouter', function () {
     var adminAccessToken;
 
     var userData;
-    var userId;
 
     var organizationData = organizations[0];
     var org_id;
@@ -67,15 +67,15 @@ describe ('OrganizationRouter', function () {
             .expect (200)
             .end (function (err, res) {
               if (err) {
-                return done (err);
+                return callback (err);
               }
 
               adminAccessToken = res.body.token;
-              return done ();
+              return callback ();
             });
           });
         }
-      ])
+      ], done);
     });
 
     describe ('Authentication', function () {
