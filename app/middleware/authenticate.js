@@ -4,7 +4,8 @@ var authenticate = {};
 
 authenticate.isAdminToken  = function (req, res, next) {
   // splits bearer and the token into an array ['bearer', token]
-  var token = req.headers.authorization.split(' ')[1];
+  var authorization = req.headers.authorization;
+  var token = authorization.split(' ')[1];
 
   // retrieve user by token
   User.findOne ({token: token}, function (err, user) {
