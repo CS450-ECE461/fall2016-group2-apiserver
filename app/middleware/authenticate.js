@@ -22,10 +22,10 @@ authenticate.isAdminToken  = function (req, res, next) {
 }
 
 authenticate.isAdminUser  = function (req, res, next) {
-  var username = req.body.username;
+  var email = req.body.email;
 
   // retrieve user by token
-  User.findOne ({username: username}, function (err, user) {
+  User.findOne ({email: email}, function (err, user) {
     /* instanbul ignore if */
     if (err) { return next (err); }
 
