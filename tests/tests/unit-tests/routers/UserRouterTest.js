@@ -40,7 +40,7 @@ describe ('UserRouter', function () {
             if (err) { return callback (err); }
 
             org_id = res._id;
-            callback ();
+            return callback ();
           });
         },
 
@@ -51,7 +51,7 @@ describe ('UserRouter', function () {
           newAdmin.org_id = org_id;
 
           newAdmin.save (function (err, user) {
-            if (err) { return done (err); }
+            if (err) { return callback (err); }
 
             var data = {
               email: user.email,
@@ -171,7 +171,6 @@ describe ('UserRouter', function () {
 
     describe ('GET', function (done) {
       it ('should get all users in the database', function (done) {
-        // Use supertest to make a request and check response.
         request (blueprint.app.server.app)
           .get ('/v1/admin/users')
           .set ('Authorization', 'bearer ' + adminAccessToken)
