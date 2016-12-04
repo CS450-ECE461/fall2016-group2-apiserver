@@ -32,10 +32,10 @@ describe ('MessageRouter', function () {
 
                 var organization = new Organization (orgData);
                 organization.save (function (err, res) {
-                  if (err) { callback (err); }
+                  if (err) { return callback (err); }
 
                   org_id = res._id;
-                  callback ();
+                  return callback ();
                 });
               },
 

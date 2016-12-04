@@ -39,10 +39,10 @@ describe ('OrganizationRouter', function () {
 
           var organization = new Organization (orgData);
           organization.save (function (err, res) {
-            if (err) { callback (err); }
+            if (err) { return callback (err); }
 
             org_id = res._id;
-            callback ();
+            return callback ();
           });
         },
 
@@ -54,7 +54,7 @@ describe ('OrganizationRouter', function () {
           newAdmin.org_id = org_id;
 
           newAdmin.save (function (err, user) {
-            if (err) { callback (err); }
+            if (err) { return callback (err); }
 
             var data = {
               email: user.email,
@@ -66,7 +66,7 @@ describe ('OrganizationRouter', function () {
             .send (data)
             .expect (200)
             .end (function (err, res) {
-              if (err) { callback (err); }
+              if (err) { return callback (err); }
 
               adminAccessToken = res.body.token;
               return callback ();
@@ -131,20 +131,16 @@ describe ('OrganizationRouter', function () {
       it ('should create an organization in the database', function (done) {
         var orgData = organizations[1];
         request (blueprint.app.server.app)
-          .post ('/organizations') // route
-          .send (orgData) // data being sent
-          .expect (200) // expected statusCode
+          .post ('/organizations')
+          .send (orgData)
+          .expect (200)
 
-          // end actually sends the request and the callback handles the response
-          // this is where you will want to perform your tests
           .end (function (err, res) {
             if (err) { return done (err); }
 
             adminId = res.body.organization.admin_id;
             organizationId = res.body.organization.org_id;
-            // note: user.user is because the request structure required
             expect (res.body.organization.org_id).to.not.be.undefined;
-            // always return done() to continue the test chain
             return done ();
           });
       });
@@ -174,7 +170,6 @@ describe ('OrganizationRouter', function () {
 
     describe ('GET', function (done) {
       it ('should get all organizations in the database', function (done) {
-        // Use supertest to make a request and check response.
         request (blueprint.app.server.app)
           .get ('/v1/admin/organizations')
           .set ('Authorization', 'bearer ' + adminAccessToken)

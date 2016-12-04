@@ -40,7 +40,7 @@ describe ('UserRouter', function () {
             if (err) { return callback (err); }
 
             org_id = res._id;
-            callback ();
+            return callback ();
           });
         },
 
@@ -51,7 +51,7 @@ describe ('UserRouter', function () {
           newAdmin.org_id = org_id;
 
           newAdmin.save (function (err, user) {
-            if (err) { return done (err); }
+            if (err) { return callback (err); }
 
             var data = {
               email: user.email,
@@ -129,19 +129,13 @@ describe ('UserRouter', function () {
         request (blueprint.app.server.app)
           .post ('/v1/admin/users') // route
           .set ('Authorization', 'bearer ' + adminAccessToken)
-          .send ({user: userData}) // data being sent
-          .expect (200) // expected statusCode
-
-          // end actually sends the request and the callback handles the response
-          // this is where you will want to perform your tests
+          .send ({user: userData})
+          .expect (200)
           .end (function (err, res) {
             if (err) { return done (err); }
 
             userId = res.body.user._id;
-            // note: user.user is because the request structure required
             expect (res.body.user.email).to.equal (userData.email);
-
-            // always return done() to continue the test chain
             return done();
           });
       });
@@ -149,7 +143,6 @@ describe ('UserRouter', function () {
 
     describe ('GET', function (done) {
       it ('should get all users in the database', function (done) {
-        // Use supertest to make a request and check response.
         request (blueprint.app.server.app)
           .get ('/v1/admin/users')
           .set ('Authorization', 'bearer ' + adminAccessToken)

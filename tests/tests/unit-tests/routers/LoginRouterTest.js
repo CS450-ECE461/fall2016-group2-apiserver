@@ -36,10 +36,10 @@ describe ('LoginRouter', function () {
 
           var organization = new Organization (orgData);
           organization.save (function (err, res) {
-            if (err) { callback (err); }
+            if (err) { return callback (err); }
 
             org_id = res._id;
-            callback ();
+            return callback ();
           });
         },
 
@@ -50,14 +50,14 @@ describe ('LoginRouter', function () {
           newUser.org_id = org_id;
 
           newUser.save(function (err, user) {
-            if (err) { callback (err); }
+            if (err) { return callback (err); }
 
             credentials = {
               email: user.email,
               password: user.password
             };
 
-            callback ();
+            return callback ();
           });
         }
       ], done);
