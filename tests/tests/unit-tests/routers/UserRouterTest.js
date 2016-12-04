@@ -189,6 +189,13 @@ describe ('UserRouter', function () {
             return done ();
           });
       });
+
+      it ('should get all users by organization', function (done) {
+        request (blueprint.app.server.app)
+          .get ('/v1/organizations/users')
+          .set ('Authorization', 'bearer ' + adminAccessToken)
+          .expect (200, done);
+      });
     });
 
     describe ('PUT', function (done) {
