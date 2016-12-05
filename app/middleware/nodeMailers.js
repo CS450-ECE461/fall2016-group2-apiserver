@@ -3,6 +3,7 @@ var stubTransport = require('nodemailer-stub-transport');
 
 var mailers = {};
 
+/* istanbul ignore next */
 mailers.mailerTransport  = function (docs, callback) {
 
   var emailer = 'HiveEmailer@gmail.com';
@@ -76,6 +77,7 @@ mailers.resolveMailer = function () {
     return mailers.mailerStub;
   }
   else{
+    /* istanbul ignore next */
     return mailers.mailerTransport;
   }
 }

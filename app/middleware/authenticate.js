@@ -4,7 +4,8 @@ var authenticate = {};
 
 authenticate.isAdminToken  = function (req, res, next) {
   // splits bearer and the token into an array ['bearer', token]
-  var token = req.headers.authorization.split(' ')[1];
+  var authorization = req.headers.authorization;
+  var token = authorization.split(' ')[1];
 
   // retrieve user by token
   User.findOne ({token: token}, function (err, user) {
@@ -22,10 +23,10 @@ authenticate.isAdminToken  = function (req, res, next) {
 }
 
 authenticate.isAdminUser  = function (req, res, next) {
-  var username = req.body.username;
+  var email = req.body.email;
 
   // retrieve user by token
-  User.findOne ({username: username}, function (err, user) {
+  User.findOne ({email: email}, function (err, user) {
     /* instanbul ignore if */
     if (err) { return next (err); }
 

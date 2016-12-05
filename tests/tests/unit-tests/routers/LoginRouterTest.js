@@ -1,14 +1,18 @@
 var blueprint = require ('@onehilltech/blueprint')
   , request   = require ('supertest')
   , expect    = require ('chai').expect
+  , async     = require ('async')
   ;
 
-var appPath = require ('../../../fixtures/appPath');
-var users   = require ('../../../fixtures/users');
+var appPath = require ('../../../fixtures/appPath')
+  , users   = require ('../../../fixtures/users')
+  , organizations = require ('../../../fixtures/organizations')
+  ;
 
 describe ('LoginRouter', function () {
 
   var userData;
+  var org_id;
 
   before (function (done) {
     blueprint.testing.createApplicationAndStart (appPath, done)
@@ -25,19 +29,38 @@ describe ('LoginRouter', function () {
     var credentials;
 
     before (function (done) {
-      var User = blueprint.app.models.User;
-      var newUser = new User (userData);
+      async.series ([
+        function (callback) {
+          var Organization = blueprint.app.models.Organization;
+          var orgData = organizations[0].organization;
 
-      newUser.save(function (err, user) {
-        if (err) { return done (err); }
+          var organization = new Organization (orgData);
+          organization.save (function (err, res) {
+            if (err) { return callback (err); }
 
-        credentials = {
-          username: user.username,
-          password: user.password
+            org_id = res._id;
+            return callback ();
+          });
+        },
+
+        function (callback) {
+          var User = blueprint.app.models.User;
+          var newUser = new User (userData);
+
+          newUser.org_id = org_id;
+
+          newUser.save(function (err, user) {
+            if (err) { return callback (err); }
+
+            credentials = {
+              email: user.email,
+              password: user.password
+            };
+
+            return callback ();
+          });
         }
-
-        return done ();
-      });
+      ], done);
     });
 
     describe ('POST', function () {
@@ -57,11 +80,11 @@ describe ('LoginRouter', function () {
           });
       });
 
-      it ('should fail to login with invalid username', function (done) {
+      it ('should fail to login with invalid email', function (done) {
         var wrongCredentials = {
-          username: 'wrong',
+          email: 'wrong',
           password: credentials.password
-        }
+        };
 
         request (blueprint.app.server.app)
           .post ('/login')
@@ -71,7 +94,7 @@ describe ('LoginRouter', function () {
 
       it ('should fail to login with invalid password', function (done) {
         var wrongCredentials = {
-          username: credentials.username,
+          email: credentials.email,
           password: 'wrong'
         }
 
@@ -83,7 +106,7 @@ describe ('LoginRouter', function () {
 
       it ('should fail to validate credentials on login', function (done) {
         var wrongCredentials = {
-          username: credentials.username
+          email: credentials.email
         }
 
         request (blueprint.app.server.app)
@@ -103,12 +126,13 @@ describe ('LoginRouter', function () {
     before (function (done) {
       var User = blueprint.app.models.User;
       var newUser = new User (adminData);
+      adminData.org_id = org_id;
 
       newUser.save(function (err, user) {
         if (err) { return done (err); }
 
         credentials = {
-          username: user.username,
+          email: user.email,
           password: user.password
         }
 
@@ -135,7 +159,7 @@ describe ('LoginRouter', function () {
 
       it ('should fail to login with user credentials', function (done) {
         var invalidCredentials = {
-          username: userData.username,
+          email: userData.email,
           password: userData.password
         }
 
@@ -145,9 +169,9 @@ describe ('LoginRouter', function () {
           .expect (403, done);
       });
 
-      it ('should fail to login with an unknown username', function (done) {
+      it ('should fail to login with an unknown email', function (done) {
           var unknownCredentials = {
-              username: 'unknown',
+              email: 'unknown',
               password: credentials.password
           }
 
