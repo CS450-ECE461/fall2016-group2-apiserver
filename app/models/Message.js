@@ -7,7 +7,7 @@ var Organization = require ('./Organization')
 var schema = new mongodb.Schema ({
     sender_email:   {type: String, required: true, trim: true},
     receiver_email: {type: String, required: true, trim: true},
-    org_id:         {type: mongodb.Schema.ObjectId, ref: Organization.modelName, required: false},
+    org_id:         {type: String, required: false, trim: true},
     received:       {type: Boolean, required: true},
     viewed:         {type: Boolean, required: true},
     expireAt:       {type: Date, required: true},
