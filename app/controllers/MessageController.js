@@ -13,8 +13,7 @@ function MessageController () {
     ResourceController.call (this, {name: 'message', model: Message});
 }
 
-MessageController.prototype.create = function ()
-{
+MessageController.prototype.create = function () {
   var opts = {
     on: {
       preCreate: function (req, doc, callback) {
@@ -33,6 +32,32 @@ MessageController.prototype.create = function ()
   };
 
   return mongodb.ResourceController.prototype.create.call (this, opts);
+};
+
+MessageController.prototype.getMessagesByOrg = function () {
+  return function (req, res) {
+    var token = req.headers.authorization.split(' ')[1];
+
+    User.findOne({token: token}, function (err, user) {
+      /* istanbul ignore if */
+      if (err) {
+        res.status(400).json(err);
+        /* istanbul ignore if */
+      } else if (!user) {
+        res.status(404).send('User not found');
+      } else {
+        var org_id = user.org_id;
+        Message.find({org_id: org_id}, {__v: 0}, function (error, messages) {
+          /* istanbul ignore if */
+          if (error) {
+            res.status(400).json(error);
+          } else {
+            res.status(200).json(messages);
+          }
+        });
+      }
+    });
+  }
 };
 
 blueprint.controller (MessageController, ResourceController);
