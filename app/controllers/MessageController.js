@@ -13,7 +13,7 @@ function MessageController () {
     ResourceController.call (this, {name: 'message', model: Message});
 }
 
-UserController.prototype.create = function ()
+MessageController.prototype.create = function ()
 {
   var opts = {
     on: {
