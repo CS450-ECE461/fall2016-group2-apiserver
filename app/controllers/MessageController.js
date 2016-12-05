@@ -29,7 +29,9 @@ MessageController.prototype.getMessagesBySender = function () {
         res.status (200).json ({messages: messages});
         return callback (null);
       }
-    ], function (err) {
+    ],
+    /* istanbul ignore next */
+    function (err) {
       if (err) { res.status (400).send (err); }
     });
   }
