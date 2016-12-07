@@ -96,7 +96,14 @@ describe ('MessageRouter', function () {
                  .expect(200, done);
            });
 
-           it ('should retrieve messages to be recieved by user', function (done) {
+           it ('should retrieve all messages by sender', function (done) {
+             request (blueprint.app.server.app)
+                .get ('/v1/messages/sent')
+                .set ('Authorization', 'bearer ' + userAccessToken)
+                .expect (200, done);
+           });
+
+           it ('should retrieve messages to be received by user', function (done) {
               request (blueprint.app.server.app)
                   .get ('/v1/messages/received')
                   .set('Authorization', 'bearer ' + userAccessToken)
@@ -107,7 +114,6 @@ describe ('MessageRouter', function () {
                       expect (res.body.messages[0].receiver_email).to.equal (newUser.email);
                       return done ();
                   });
-
            });
         });
 
