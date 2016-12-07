@@ -119,8 +119,8 @@ describe ('MessageRouter', function () {
            it ('should retrieve all messages by organization', function (done) {
              request (blueprint.app.server.app)
                .get ('/v1/admin/organizations/messages')
-               .set('Authorization', 'bearer ' + adminAccessToken)
-               .expect(200, done);
+               .set ('Authorization', 'bearer ' + adminAccessToken)
+               .expect (200, done);
            });
         });
     });
