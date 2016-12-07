@@ -20,8 +20,8 @@ describe ('MessageRouter', function () {
     });
     describe ('/v1/messages', function () {
 
-        var userAccessToken;
-        var newUser;
+        var adminAccessToken;
+        var newAdmin;
         var org_id;
 
         before (function (done) {
@@ -40,12 +40,12 @@ describe ('MessageRouter', function () {
               },
 
               function (callback) {
-                var userData = users[0];
+                var adminData = users[1];
                 var User = blueprint.app.models.User;
-                newUser = new User(userData);
-                newUser.org_id = org_id;
+                newAdmin = new User(adminData);
+                newAdmin.org_id = org_id;
 
-                newUser.save(function (err, user) {
+                newAdmin.save(function (err, user) {
                   if (err) {
                     return callback (err);
                   }
@@ -64,7 +64,7 @@ describe ('MessageRouter', function () {
                       return callback (err);
                     }
 
-                    userAccessToken = res.body.token;
+                    adminAccessToken = res.body.token;
                     return callback ();
                   });
                 });
@@ -77,13 +77,13 @@ describe ('MessageRouter', function () {
                 var messageData = messages[0];
                 request (blueprint.app.server.app)
                     .post ('/v1/messages')
-                    .set ('Authorization', 'bearer ' + userAccessToken)
+                    .set ('Authorization', 'bearer ' + adminAccessToken)
                     .send({message: messageData})
                     .expect (200)
                     .end(function (err, res) {
                         if (err) { return done (err); }
 
-                        expect (res.body.message.receiver_email).to.equal (newUser.email);
+                        expect (res.body.message.receiver_email).to.equal (newAdmin.email);
                         return done ();
                     });
             });
@@ -92,30 +92,36 @@ describe ('MessageRouter', function () {
            it ('should retrieve all messages', function (done) {
              request (blueprint.app.server.app)
                  .get('/v1/messages')
-                 .set('Authorization', 'bearer ' + userAccessToken)
+                 .set('Authorization', 'bearer ' + adminAccessToken)
                  .expect(200, done);
            });
 
            it ('should retrieve all messages by sender', function (done) {
              request (blueprint.app.server.app)
                 .get ('/v1/messages/sent')
-                .set ('Authorization', 'bearer ' + userAccessToken)
+                .set ('Authorization', 'bearer ' + adminAccessToken)
                 .expect (200, done);
            });
 
            it ('should retrieve messages to be received by user', function (done) {
               request (blueprint.app.server.app)
                   .get ('/v1/messages/received')
-                  .set('Authorization', 'bearer ' + userAccessToken)
+                  .set('Authorization', 'bearer ' + adminAccessToken)
                   .expect(200)
                   .end(function (err, res) {
                       if (err) { return done (err); }
 
-                      expect (res.body.messages[0].receiver_email).to.equal (newUser.email);
+                      expect (res.body.messages[0].receiver_email).to.equal (newAdmin.email);
                       return done ();
                   });
            });
-        });
 
+           it ('should retrieve all messages by organization', function (done) {
+             request (blueprint.app.server.app)
+               .get ('/v1/admin/organizations/messages')
+               .set ('Authorization', 'bearer ' + adminAccessToken)
+               .expect (200, done);
+           });
+        });
     });
 });
