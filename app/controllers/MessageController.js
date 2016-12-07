@@ -21,7 +21,7 @@ MessageController.prototype.create = function () {
         var token = req.headers.authorization.split(' ')[1];
 
         User.findOne({token: token}, function (err, user) {
-          /* istanbul ignore */
+          /* istanbul ignore if */
           if (err) {
             return callback(err);
           }
