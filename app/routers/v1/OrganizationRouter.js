@@ -8,10 +8,6 @@ module.exports = exports = {
       get: { action: 'UserController@getUsersByOrg' }
     },
 
-    '/messages': {
-      get: { action: 'MessageController@getMessagesByOrg' }
-    },
-
     '/:organizationId': {
       get: { action: 'OrganizationController@get' }
     }
