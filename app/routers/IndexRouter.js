@@ -8,6 +8,6 @@ module.exports = exports = {
     }
   },
   '/organizations': {
-    post: { action: 'OrganizationRouter@create' }
+    post: { action: 'OrganizationController@create' }
   }
 };

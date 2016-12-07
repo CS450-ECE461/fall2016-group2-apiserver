@@ -99,7 +99,7 @@ describe ('MessageRouter', function () {
            it ('should retrieve all messages by sender', function (done) {
              request (blueprint.app.server.app)
                 .get ('/v1/messages/sent')
-                .set ('Authorization', 'bearer ' + userAccessToken)
+                .set ('Authorization', 'bearer ' + adminAccessToken)
                 .expect (200, done);
            });
 
