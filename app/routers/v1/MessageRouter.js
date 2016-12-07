@@ -4,6 +4,10 @@ module.exports = exports = {
         get: { action: 'MessageController@getAll' },
         post: { action: 'MessageController@create' },
 
+        '/sent': {
+          get: { action: 'MessageController@getMessagesBySender' }
+        },
+
         '/received' : {
             get: { action: 'MessageController@getMessagesByReceiver'}
         },
