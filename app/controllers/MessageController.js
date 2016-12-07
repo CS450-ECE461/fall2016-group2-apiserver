@@ -67,49 +67,49 @@ MessageController.prototype.getMessagesBySender = function () {
     var token = req.headers.authorization.split(' ')[1];
 
     async.waterfall ([
-      function (callback) {
-        User.findOne ({token: token}, callback)
-      },
-      function (user, callback) {
-        Message.find ({sender_email: user.email}, {__v: 0}, callback);
-      },
-      function (messages, callback) {
-        res.status (200).json ({messages: messages});
-        return callback (null);
-      }
-    ],
-    /* istanbul ignore next */
-    function (err) {
-      if (err) { res.status (400).send (err); }
-    });
+        function (callback) {
+          User.findOne ({token: token}, callback)
+        },
+        function (user, callback) {
+          Message.find ({sender_email: user.email}, {__v: 0}, callback);
+        },
+        function (messages, callback) {
+          res.status (200).json ({messages: messages});
+          return callback (null);
+        }
+      ],
+      /* istanbul ignore next */
+      function (err) {
+        if (err) { res.status (400).send (err); }
+      });
   }
 };
 
 MessageController.prototype.getMessagesByReceiver = function () {
-    return function(req, res){
-        // splits bearer and the token into an array ['bearer', token]
-        var token = req.headers.authorization.split(' ')[1];
+  return function(req, res){
+    // splits bearer and the token into an array ['bearer', token]
+    var token = req.headers.authorization.split(' ')[1];
 
-        async.waterfall([
-            function(callback){
-                User.findOne({token: token}, callback)
-            },
-            function (user, callback) {
-                Message.find({receiver_email: user.email}, {__v: 0})
-                    .where('expireAt').gte(Date.now())
-                    .exec(callback);
-            },
-            function (messages, callback) {
-                res.status(200).json({messages: messages});
-                return callback(null);
-            }
-        ],
-        /* istanbul ignore next */
-        function(err) {
-            if(err)
-                res.status(400).send(err);
-        });
-    }
+    async.waterfall([
+        function(callback){
+          User.findOne({token: token}, callback)
+        },
+        function (user, callback) {
+          Message.find({receiver_email: user.email}, {__v: 0})
+          .where('expireAt').gte(Date.now())
+          .exec(callback);
+        },
+        function (messages, callback) {
+          res.status(200).json({messages: messages});
+          return callback(null);
+        }
+      ],
+      /* istanbul ignore next */
+      function(err) {
+        if(err)
+          res.status(400).send(err);
+      });
+  }
 };
 
 blueprint.controller (MessageController, ResourceController);
