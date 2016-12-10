@@ -1,7 +1,7 @@
 var messages = [
   {
-    sender_email: 'sender@testmail.com',
-    receiver_email: 'admin1@test.com',
+    sender: 'sender',
+    receiver: 'admin1',
     received: false,
     viewed: false,
     expireAt: new Date(Date.now() + 10000),
