@@ -86,6 +86,24 @@ UserController.prototype.create = function ()
   return mongodb.ResourceController.prototype.create.call (this, opts);
 };
 
+UserController.prototype.profile = function () {
+  return function (req, res) {
+    var token = req.headers.authorization.split(' ')[1];
+
+    User.findOne({token: token}, {__v: 0, password: 0, token: 0, org_id: 0, role: 0}, function (err, user) {
+      /* istanbul ignore if */
+      if (err) { res.status (400).json (err); }
+
+      /* istanbul ignore if */
+      if (!user) {
+        res.status (404).send ('User not found');
+      } else {
+        res.status (200).json (user);
+      }
+    });
+  }
+};
+
 blueprint.controller (UserController, ResourceController);
 
 module.exports = exports = UserController;

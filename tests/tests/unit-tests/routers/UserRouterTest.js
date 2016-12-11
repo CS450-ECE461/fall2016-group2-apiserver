@@ -196,6 +196,19 @@ describe ('UserRouter', function () {
           .set ('Authorization', 'bearer ' + adminAccessToken)
           .expect (200, done);
       });
+
+      it ('should get a users profile information', function (done) {
+        request (blueprint.app.server.app)
+          .get ('/v1/users/profile')
+          .set ('Authorization', 'bearer ' + adminAccessToken)
+          .expect (200)
+          .end (function (err, res) {
+            if (err) { return done (err); }
+
+            expect (res.body.username).to.equal (adminData.username);
+            return done ();
+          });
+      });
     });
 
     describe ('PUT', function (done) {
