@@ -27,6 +27,7 @@ MessageController.prototype.create = function () {
           }
 
           doc.org_id = user.org_id;
+          doc.sender = user.username;
           return callback(null, doc);
         });
       }
@@ -95,9 +96,7 @@ MessageController.prototype.getMessagesByReceiver = function () {
           User.findOne({token: token}, callback)
         },
         function (user, callback) {
-          Message.find({org_id: user.org_id, receiver: user.username}, {__v: 0})
-          .where('expireAt').gte(Date.now())
-          .exec(callback);
+          Message.find({org_id: user.org_id, receiver: user.username}, {__v: 0}).exec(callback);
         },
         function (messages, callback) {
           res.status(200).json({messages: messages});
