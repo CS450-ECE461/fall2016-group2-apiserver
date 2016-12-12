@@ -83,7 +83,7 @@ describe ('MessageRouter', function () {
         .end(function (err, res) {
           if (err) { return done (err); }
 
-          expect (res.body.message.receiver_email).to.equal (newAdmin.email);
+          expect (res.body.message.receiver).to.equal (newAdmin.username);
           return done ();
         });
       });
@@ -111,7 +111,7 @@ describe ('MessageRouter', function () {
         .end(function (err, res) {
           if (err) { return done (err); }
 
-          expect (res.body.messages[0].receiver_email).to.equal (newAdmin.email);
+          expect (res.body.messages[0].receiver).to.equal (newAdmin.username);
           return done ();
         });
       });
