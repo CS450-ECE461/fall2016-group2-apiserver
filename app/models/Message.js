@@ -5,7 +5,7 @@ var Organization = require ('./Organization')
   ;
 
 var schema = new mongodb.Schema ({
-  sender:   {type: String, required: true, trim: true},
+  sender:   {type: String, required: false, trim: true},
   receiver: {type: String, required: true, trim: true},
   org_id:   {type: String, required: false, trim: true},
   received: {type: Boolean, required: true},
