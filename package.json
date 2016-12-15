@@ -12,20 +12,21 @@
   "dependencies": {
     "@onehilltech/blueprint": "1.1.1",
     "@onehilltech/blueprint-mongodb": "0.9.1",
-    "chai": "^3.5.0",
-    "coveralls": "^2.11.14",
-    "istanbul": "^0.4.5",
     "jsonwebtoken": "^7.1.9",
-    "mocha": "^3.1.2",
-    "mocha-lcov-reporter": "^1.2.0",
     "nodemailer": "^2.6.4",
-    "nodemailer-stub-transport": "^1.1.0",
     "passport": "^0.3.2",
     "passport-http-bearer": "^1.0.1",
-    "superagent": "^2.3.0",
+    "superagent": "^2.3.0"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.14",
+    "istanbul": "^0.4.5",
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2",
+    "mocha-lcov-reporter": "^1.2.0",
+    "nodemailer-stub-transport": "^1.1.0",
     "supertest": "^2.0.1"
   },
-  "devDependencies": {},
   "license": "Apache-2.0",
   "engines": {
     "node": ">=4.0.0",
