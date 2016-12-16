@@ -29,3 +29,6 @@ ratings:
 exclude_paths:
 - tests/
 - app/models/
+- "README.md"
+- "LICENSE"
+- "package.json"
