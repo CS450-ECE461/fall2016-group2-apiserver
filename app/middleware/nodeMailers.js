@@ -3,7 +3,7 @@ var stubTransport = require('nodemailer-stub-transport');
 
 var mailers = {};
 
-var sendEmail = function (transporter, emailer, docs) {
+var sendEmail = function (transporter, emailer, docs, callback) {
   var message = '<p>Thank you ' + docs.organization.name + ' for joining Hive!</p>';
   message += '<p>Your admin credentials are listed below!</p>';
   message += '<p>username: ' + docs.user.username + '</p>';
@@ -43,7 +43,7 @@ mailers.mailerTransport  = function (docs, callback) {
   // create reusable transporter object using the default SMTP transport
   var transporter = nodemailer.createTransport(connection);
 
-  sendEmail (transporter, emailer, docs);
+  sendEmail (transporter, emailer, docs, callback);
 };
 
 mailers.mailerStub = function (docs, callback) {
@@ -51,7 +51,7 @@ mailers.mailerStub = function (docs, callback) {
 
   var emailer = 'HiveEmailer@gmail.com';
 
-  sendEmail (transporter, emailer, docs);
+  sendEmail (transporter, emailer, docs, callback);
 };
 
 mailers.resolveMailer = function () {
