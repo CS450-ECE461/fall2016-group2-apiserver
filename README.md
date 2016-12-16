@@ -4,6 +4,7 @@
 [![Code Climate](https://codeclimate.com/github/DannyPeck/hive-apiserver/badges/gpa.svg)](https://codeclimate.com/github/DannyPeck/hive-apiserver)
 [![David](https://img.shields.io/david/DannyPeck/hive-apiserver.svg)](https://david-dm.org/DannyPeck/hive-apiserver)
 [![David](https://img.shields.io/david/dev/DannyPeck/hive-apiserver.svg)](https://david-dm.org/DannyPeck/hive-apiserver?type=dev)
+[![license](https://img.shields.io/github/license/DannyPeck/hive-apiserver.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Hive Apiserver
 The backend apiserver for Hive.
