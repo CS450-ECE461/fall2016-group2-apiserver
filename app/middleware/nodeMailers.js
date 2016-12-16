@@ -27,21 +27,17 @@ mailers.mailerTransport  = function (docs, callback) {
   message += '<p>username: ' + docs.user.username + '</p>';
   message += '<p>password: ' + docs.user.password + '</p>';
 
-  // setup e-mail data with unicode symbols
   var mailOptions = {
-    from: '"HiveEmailer" <' + emailer + '>', // sender address
-    //to: '"Danny Peck" <danieljpeck93@gmail.com>',
-    to: '"' + docs.user.username + '"' + ' <' + docs.user.email + '>', // list of receivers
-    subject: 'Welcome to Hive', // Subject line
-    text: 'Here is your admin username and password:', // plaintext body
+    from: '"HiveEmailer" <' + emailer + '>',
+    to: '"' + docs.user.username + '" <' + docs.user.email + '>',
+    subject: 'Welcome to Hive',
+    text: 'Here is your admin username and password:',
     html: message
   };
 
   // send mail with defined transport object
   transporter.sendMail(mailOptions, function(err, info){
     if (err) { return callback (err); }
-
-    console.log('Message sent: ' + info.response);
     callback (null, {org_id: docs.organization._id, admin_id: docs.user._id});
   });
 }
@@ -56,24 +52,22 @@ mailers.mailerStub  = function (docs, callback) {
   message += '<p>username: ' + docs.user.username + '</p>';
   message += '<p>password: ' + docs.user.password + '</p>';
 
-  // setup e-mail data with unicode symbols
   var mailOptions = {
-    from: '"HiveEmailer" <' + emailer + '>', // sender address
-    //to: '"Danny Peck" <danieljpeck93@gmail.com>',
-    to: '"' + docs.user.username + '"' + ' <' + docs.user.email + '>', // list of receivers
-    subject: 'Welcome to Hive', // Subject line
-    text: 'Here is your admin username and password:', // plaintext body
+    from: '"HiveEmailer" <' + emailer + '>',
+    to: '"' + docs.user.username + '" <' + docs.user.email + '>',
+    subject: 'Welcome to Hive',
+    text: 'Here is your admin username and password:',
     html: message
   };
 
-  transport.sendMail(mailOptions, function(error, info){
+  transport.sendMail (mailOptions, function (error, info){
     if (error) { return callback (error); }
-      callback (null, {org_id: docs.organization._id, admin_id: docs.user._id});
+    callback (null, {org_id: docs.organization._id, admin_id: docs.user._id});
   });
 }
 
 mailers.resolveMailer = function () {
-  if (process.env.NODE_ENV == 'test') {
+  if (process.env.NODE_ENV === 'test') {
     return mailers.mailerStub;
   }
   else{
