@@ -7,7 +7,8 @@
     "test": "env NODE_ENV=test mocha --recursive tests/tests",
     "cover": "env NODE_ENV=test istanbul cover _mocha -- --recursive tests/tests",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
-    "start": "env NODE_ENV=development node ./app",
+    "dev": "env NODE_ENV=development node ./app",
+    "prod": "env NODE_ENV=production node ./app",
     "codeclimate-test-reporter": "codeclimate-test-reporter < ./coverage/lcov.info"
   },
   "dependencies": {
