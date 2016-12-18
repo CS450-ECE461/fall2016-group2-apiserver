@@ -1,0 +1,34 @@
+---
+engines:
+  duplication:
+    enabled: true
+    exclude_fingerprints:
+    - 3dbaa3d0f9550e45f6d4e541b40b80b1
+    - 93186fc529e0c210203eb55568447b7b
+    - 0212aebdc40e6a90175d19c35084614a
+    - e63dfff968ea136c75ce3318d67f7df4
+    config:
+      languages:
+      - ruby
+      - javascript
+      - python
+      - php
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+ratings:
+  paths:
+  - "**.inc"
+  - "**.js"
+  - "**.jsx"
+  - "**.module"
+  - "**.php"
+  - "**.py"
+  - "**.rb"
+exclude_paths:
+- tests/
+- app/models/
+- "README.md"
+- "LICENSE"
+- "package.json"
