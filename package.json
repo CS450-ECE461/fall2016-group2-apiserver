@@ -1,7 +1,7 @@
 {
   "name": "hive-apiserver",
   "description": "",
-  "version": "3.0.2",
+  "version": "0.3.2",
   "private": true,
   "scripts": {
     "test": "env NODE_ENV=test mocha --recursive tests/tests",
